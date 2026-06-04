@@ -1,0 +1,43 @@
+{
+  "name": "@malber/pi-dotnet",
+  "version": "0.1.0",
+  "description": "Pi coding harness for .NET / C# / ASP.NET Core / EF Core / SQL Server / React projects",
+  "license": "MIT",
+  "author": "Michael Alber",
+  "keywords": [
+    "pi",
+    "dotnet",
+    "csharp",
+    "aspnet",
+    "ollama",
+    "coding-agent",
+    "local-ai"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://codeberg.org/malber/pi-packages"
+  },
+  "scripts": {
+    "prepublishOnly": "node ../../scripts/prepublish.js pi-dotnet"
+  },
+  "pi": {
+    "name": "dotnet",
+    "description": ".NET / C# / ASP.NET Core / EF Core / SQL Server / React — with grounded-code-mcp RAG",
+    "skills": [
+      "skills/dotnet.md"
+    ],
+    "prompts": [
+      { "name": "fix",       "file": "prompts/fix.md" },
+      { "name": "review",    "file": "prompts/review.md" },
+      { "name": "generate",  "file": "prompts/generate.md" },
+      { "name": "explain",   "file": "prompts/explain.md" },
+      { "name": "decompose", "file": "prompts/decompose.md" }
+    ],
+    "extensions": [
+      "extensions/rag.ts",
+      "extensions/router.ts",
+      "extensions/budget.ts",
+      "extensions/project-detect.ts"
+    ]
+  }
+}

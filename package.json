@@ -1,0 +1,22 @@
+{
+  "name": "@malber/pi-packages",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pi coding harnesses for local Ollama inference — .NET, PHP, Python, Robotics, Industrial",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "tsc --noEmit -p tsconfig.json",
+    "build": "node scripts/prepublish.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.3"
+  },
+  "pi": {
+    "agents": [
+      "AGENTS.md"
+    ]
+  }
+}

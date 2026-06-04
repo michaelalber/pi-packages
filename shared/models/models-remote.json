@@ -1,0 +1,25 @@
+{
+  "description": "Tailscale / VPN overrides — use when MagicDNS short names don't resolve outside the tailnet",
+  "notes": "In most Tailscale setups, http://mac-mini:11434 works everywhere. Use this file only if it doesn't.",
+  "models": [
+    {
+      "id": "mac-mini/qwen2.5-coder:32b",
+      "provider": "ollama",
+      "baseUrl": "http://mac-mini.tail12345.ts.net:11434",
+      "model": "qwen2.5-coder:32b",
+      "notes": "Replace tail12345 with your actual tailnet name from tailscale status"
+    },
+    {
+      "id": "mac-mini/llama3.3:70b",
+      "provider": "ollama",
+      "baseUrl": "http://mac-mini.tail12345.ts.net:11434",
+      "model": "llama3.3:70b"
+    },
+    {
+      "id": "mac-mini/codestral:22b",
+      "provider": "ollama",
+      "baseUrl": "http://mac-mini.tail12345.ts.net:11434",
+      "model": "codestral:22b"
+    }
+  ]
+}
