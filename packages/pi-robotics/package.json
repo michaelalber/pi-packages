@@ -1,0 +1,43 @@
+{
+  "name": "@malber/pi-robotics",
+  "version": "0.1.0",
+  "description": "Pi coding harness for Robotics — ROS 2, Python, C++, edge AI, simulation (MuJoCo, Isaac Lab)",
+  "license": "MIT",
+  "author": "Michael Alber",
+  "keywords": [
+    "pi",
+    "robotics",
+    "ros2",
+    "edge-ai",
+    "ollama",
+    "coding-agent",
+    "local-ai"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://codeberg.org/malber/pi-packages"
+  },
+  "scripts": {
+    "prepublishOnly": "node ../../scripts/prepublish.js pi-robotics"
+  },
+  "pi": {
+    "name": "robotics",
+    "description": "ROS 2 / Python / C++ / edge AI / simulation — with grounded-code-mcp RAG",
+    "skills": [
+      "skills/robotics.md"
+    ],
+    "prompts": [
+      { "name": "fix",       "file": "prompts/fix.md" },
+      { "name": "review",    "file": "prompts/review.md" },
+      { "name": "generate",  "file": "prompts/generate.md" },
+      { "name": "explain",   "file": "prompts/explain.md" },
+      { "name": "decompose", "file": "prompts/decompose.md" }
+    ],
+    "extensions": [
+      "extensions/rag.ts",
+      "extensions/router.ts",
+      "extensions/budget.ts",
+      "extensions/project-detect.ts"
+    ]
+  }
+}
