@@ -1,0 +1,43 @@
+{
+  "name": "@malber/pi-php",
+  "version": "0.1.0",
+  "description": "Pi coding harness for PHP / Laravel / Vue.js projects",
+  "license": "MIT",
+  "author": "Michael Alber",
+  "keywords": [
+    "pi",
+    "php",
+    "laravel",
+    "vuejs",
+    "ollama",
+    "coding-agent",
+    "local-ai"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://codeberg.org/malber/pi-packages"
+  },
+  "scripts": {
+    "prepublishOnly": "node ../../scripts/prepublish.js pi-php"
+  },
+  "pi": {
+    "name": "php",
+    "description": "PHP / Laravel / Vue.js — with grounded-code-mcp RAG",
+    "skills": [
+      "skills/php.md"
+    ],
+    "prompts": [
+      { "name": "fix",       "file": "prompts/fix.md" },
+      { "name": "review",    "file": "prompts/review.md" },
+      { "name": "generate",  "file": "prompts/generate.md" },
+      { "name": "explain",   "file": "prompts/explain.md" },
+      { "name": "decompose", "file": "prompts/decompose.md" }
+    ],
+    "extensions": [
+      "extensions/rag.ts",
+      "extensions/router.ts",
+      "extensions/budget.ts",
+      "extensions/project-detect.ts"
+    ]
+  }
+}

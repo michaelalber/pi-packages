@@ -1,0 +1,1 @@
+../../../shared/extensions/project-detect.ts
