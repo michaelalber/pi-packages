@@ -9,10 +9,10 @@ Each harness package ships a **skill** (behavior rules), **prompt templates** (f
 | Package | Project types |
 |---|---|
 | `pi-dotnet` | .NET / C# / ASP.NET Core / EF Core / SQL Server / React |
-| `pi-php` *(coming)* | PHP / Laravel / Vue.js |
-| `pi-python` *(coming)* | Python / FastAPI / SQLAlchemy |
-| `pi-robotics` *(coming)* | ROS 2 / LeRobot / Isaac Lab |
-| `pi-industrial` *(coming)* | MODBUS / OPC UA / PLC |
+| `pi-php` | PHP / Laravel / Vue.js |
+| `pi-python` | Python / FastAPI / SQLAlchemy / pytest |
+| `pi-robotics` | ROS 2 / Python / C++ / edge AI / MuJoCo / Isaac Lab / LeRobot |
+| `pi-industrial` | MODBUS / OPC UA / PLC (IEC 61131-3) / SCADA / ICS security |
 
 ---
 
@@ -114,14 +114,22 @@ curl http://mac-mini:11434/api/tags
 
 If you use Tailscale, `mac-mini` resolves via MagicDNS on both LAN and VPN automatically.
 
-### 4. Register the Modelfile with Ollama
+### 4. Register Modelfiles with Ollama
+
+Run the commands for the packages you use. Each creates a named custom model in Ollama:
 
 ```bash
-# From the repo root — creates a custom model named "dotnet-coder"
-ollama create dotnet-coder -f packages/pi-dotnet/modelfiles/dotnet.Modelfile
+# From the repo root
+ollama create dotnet-coder      -f packages/pi-dotnet/modelfiles/dotnet.Modelfile
+ollama create php-coder         -f packages/pi-php/modelfiles/php.Modelfile
+ollama create python-coder      -f packages/pi-python/modelfiles/python.Modelfile
+ollama create robotics-coder    -f packages/pi-robotics/modelfiles/robotics.Modelfile
+ollama create industrial-coder  -f packages/pi-industrial/modelfiles/industrial.Modelfile
 ```
 
-Verify: `ollama list` — `dotnet-coder` should appear.
+Each Modelfile defaults to the Mac Mini base model. Swap the `FROM` line before running if you are on the PC (`phi4:14b`) or Laptop (`phi3.5:3.8b`).
+
+Verify: `ollama list` — the new model names should appear.
 
 ### 5. Configure Pi models
 
@@ -149,27 +157,41 @@ See [grounded-code-mcp](https://codeberg.org/malber/grounded-code-mcp) for setup
 
 ```bash
 pi install git:codeberg.org/malber/pi-packages/packages/pi-dotnet
+pi install git:codeberg.org/malber/pi-packages/packages/pi-php
+pi install git:codeberg.org/malber/pi-packages/packages/pi-python
+pi install git:codeberg.org/malber/pi-packages/packages/pi-robotics
+pi install git:codeberg.org/malber/pi-packages/packages/pi-industrial
 ```
 
 **From npm (after publishing):**
 
 ```bash
 pi install npm:@malber/pi-dotnet
+pi install npm:@malber/pi-php
+pi install npm:@malber/pi-python
+pi install npm:@malber/pi-robotics
+pi install npm:@malber/pi-industrial
 ```
 
-Verify: `pi skills` — `dotnet` should appear in the list.
+Install only the packages relevant to your projects — you do not need all five.
+
+Verify: `pi skills` — the installed skill names should appear in the list.
 
 ---
 
 ## Usage
 
-### Load the .NET skill
+### Load a skill
 
 ```
-/skill:dotnet
+/skill:dotnet       .NET / C# / ASP.NET Core / EF Core
+/skill:php          PHP / Laravel / Vue.js
+/skill:python       Python / FastAPI / SQLAlchemy / pytest
+/skill:robotics     ROS 2 / edge AI / MuJoCo / Isaac Lab
+/skill:industrial   MODBUS / OPC UA / PLC / SCADA
 ```
 
-This loads the skill rules into the session. `project-detect` does this automatically if it finds a `.csproj` or `.sln` in the working directory.
+`project-detect` loads the right skill automatically based on project signals (`.csproj`, `composer.json`, `pyproject.toml`, `package.xml`, `Makefile` with MODBUS/OPC patterns). Use the explicit `/skill:` command to override.
 
 ### Run a prompt template
 
@@ -222,12 +244,17 @@ pi-packages/
 
   packages/
     pi-dotnet/
+    pi-php/
+    pi-python/
+    pi-robotics/
+    pi-industrial/
+      Each package contains:
       package.json            Pi manifest + npm metadata
-      skills/dotnet.md        Skill: .NET rules and grounded-code collection map
-      prompts/                .NET-specific overrides of the 5 base templates
+      skills/<type>.md        Skill: invariants and grounded-code collection map
+      prompts/                5 prompt templates (fix/review/generate/explain/decompose)
       extensions/             Symlinks → shared/extensions/
       modelfiles/
-        dotnet.Modelfile      Ollama Modelfile (temperature, context, system prompt)
+        <type>.Modelfile      Ollama Modelfile (temperature, context, system prompt)
 ```
 
 ---
