@@ -65,7 +65,7 @@ or requiring cloud API keys.
 - Changing the shared extension API surface in `shared/types/pi.d.ts`
 - Any npm publish action — packages are public once published
 - Changes to `shared/models/*.json` that alter model IDs or baseUrls
-- Decisions that affect `ARCHITECTURE.md` — it is the single source of truth for system design
+- Changes to the shared extension API surface in `shared/types/pi.d.ts`
 
 ---
 

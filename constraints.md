@@ -34,7 +34,6 @@
 - Do not add a new project-type package without a corresponding entry in `project-detect.ts`.
 - Do not change router threshold values (150 / 500 tokens) without explicit human approval — they affect all machines.
 - Do not embed model origin policy (US/EU vs. best overall) in code — keep it in the separate model JSON files.
-- Do not modify `ARCHITECTURE.md` without explicit human approval — it is the single source of truth for system design decisions.
 - Do not leave TODO comments in committed files — either implement it or mark `[CANNOT COMPLETE]`.
 
 ---
@@ -57,7 +56,6 @@
 - Any npm publish action — packages are public after publish.
 - Changes to `shared/models/*.json` model IDs or baseUrls — affects every machine running the harness.
 - Any decision to diverge from the shared extension pattern (i.e., giving one package its own non-symlinked copy of an extension).
-- Changes to `ARCHITECTURE.md` — escalate even minor wording changes to preserve it as the authoritative design document.
 
 ---
 

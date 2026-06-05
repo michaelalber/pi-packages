@@ -11,7 +11,7 @@
      RELATED FILES:
        intent.md       — what the agent should optimize for (goals, values, tradeoff hierarchy)
        constraints.md  — musts, must-nots, preferences, escalation triggers
-       ARCHITECTURE.md — full system design, hardware matrix, model recommendations, phases -->
+       -->
 
 ---
 
@@ -19,7 +19,7 @@
 
 - **Name:** pi-packages
 - **Purpose:** Project-type-specific harnesses for the [Pi](https://pi.dev) (Earendil Inc.) coding agent backed by local inference (Ollama on all platforms; MLX-LM on Apple Silicon). Each package ships a skill, prompt templates, TypeScript extensions, and an Ollama Modelfile tuned for its domain.
-- **Phase:** Active development — implementing Phase 2 (core packages) through Phase 5 (npm publish + portfolio polish). See `ARCHITECTURE.md § 9 Implementation Phases`.
+- **Phase:** Active development — implementing Phase 2 (core packages) through Phase 5 (npm publish + portfolio polish).
 - **Definition of success:** Every installed harness loads its skill automatically, calls `search_knowledge` via the RAG extension before generating code, routes tasks to the correct inference endpoint, and stays within the context budget — all without manual configuration.
 
 ---
@@ -60,7 +60,6 @@
 
 | File | Why It Matters |
 |---|---|
-| `ARCHITECTURE.md` | Full system design, hardware/model matrix, harness quality strategies, and phased implementation plan |
 | `shared/extensions/rag.ts` | Registers `search_knowledge` and `search_code_examples` tools — the RAG first-step pattern every skill depends on |
 | `shared/extensions/router.ts` | Automatic PC / Mac Mini model routing by task complexity |
 | `shared/extensions/budget.ts` | Context window guard — prevents runaway inference costs and quality degradation |
@@ -144,8 +143,7 @@ These are the minimal rules every project-type harness inherits:
 ## Project Boot Ritual
 
 Follow the global Session Boot Ritual (see global `CLAUDE.md` / `AGENTS.md`). Repo-specific deltas:
-read this file plus `intent.md`, `constraints.md`, and `ARCHITECTURE.md § 9` (implementation phases)
-before starting. Confirm **Persistent Decisions** and **Open Loops** above. The grounded-code-mcp
+read this file plus `intent.md` and `constraints.md` before starting. Confirm **Persistent Decisions** and **Open Loops** above. The grounded-code-mcp
 workflow (search_knowledge / search_code_examples) is defined globally — not repeated here.
 
 ---
