@@ -51,7 +51,7 @@
 
 ## Escalate Rather Than Decide
 
-- Any proposal to add a sixth project-type package not currently in `AGENTS.md`.
+- Any proposal to add a seventh project-type package not currently in `AGENTS.md`.
 - Changes to router threshold values (150 / 500 tokens in `shared/extensions/router.ts`).
 - Changes to the Pi ExtensionAPI surface (`shared/types/pi.d.ts`) — affects all extensions.
 - Any npm publish action — packages are public after publish.

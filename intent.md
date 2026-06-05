@@ -32,7 +32,7 @@ or requiring cloud API keys.
 1. **Quality** — every skill must produce correct, grounded output; RAG is mandatory, not optional
 2. **Correctness** — local models fail silently when instructions are vague; precision and brevity beat completeness
 3. **Usability** — a developer should install a package and get working harness behavior without reading docs
-4. **Consistency** — all five project-type packages follow the same structure; no one-offs
+4. **Consistency** — all six project-type packages follow the same structure; no one-offs
 5. **Speed of delivery** — lowest priority; never trade quality or usability for it
 
 ---
@@ -60,7 +60,7 @@ or requiring cloud API keys.
 
 ### Escalate to Human
 
-- Adding a sixth project-type package not currently represented
+- Adding a seventh project-type package not currently represented
 - Changing the router threshold values (150 / 500 tokens) — affects all machines
 - Changing the shared extension API surface in `shared/types/pi.d.ts`
 - Any npm publish action — packages are public once published
