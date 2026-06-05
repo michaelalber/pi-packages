@@ -10,9 +10,10 @@ templates, and persistent decisions.
 - **Skills:** `packages/pi-<type>/skills/<type>.md` — < 500 tokens, RAG-first, invariants + collection map
 - **Prompt templates:** `packages/pi-<type>/prompts/` — 5 files (fix / review / generate / explain / decompose); base templates in `shared/prompts/`
 - **Extensions:** `packages/pi-<type>/extensions/` — symlinks to `shared/extensions/` (rag, router, budget, project-detect)
-- **Modelfiles:** `packages/pi-<type>/modelfiles/<type>.Modelfile` — temperature 0.15, num_ctx per machine tier
+- **Modelfiles:** `packages/pi-<type>/modelfiles/<type>.Modelfile` — Ollama-only convenience wrapper; behavior rules are authoritative in the skill file
 - **Types:** `shared/types/pi.d.ts` — Pi ExtensionAPI declarations; read before editing any extension
-- **Models:** `shared/models/models-us-eu.json` (List A), `models-best.json` (List B), `models-remote.json` (Tailscale)
+- **Models (Ollama):** `shared/models/models-us-eu.json` (List A), `models-best.json` (List B), `models-remote.json` (Tailscale)
+- **Models (MLX-LM):** `shared/models/models-mac-mini-mlx.json` (Apple Silicon Mac Mini), `models-remote-mlx.json` (Tailscale)
 
 ---
 
@@ -38,17 +39,20 @@ grep -r "pi\." packages/pi-dotnet/extensions/ | head -20
 
 1. Copy the gold standard: `packages/pi-dotnet/skills/dotnet.md`
 2. Keep total token count < 500 — precision beats comprehensiveness for local models
-3. Structure: Before writing code (RAG calls) → Invariants → Task approach → Quality gates → Collection map
-4. Map all grounded-code collections the project type needs (see `AGENTS.md § grounded-code Collection Map`)
+3. Structure: Before writing code (RAG calls) → Invariants → Task approach → Quality gates → **Output format** → Collection map
+4. The `## Output format` section is required — it is the authoritative source for output conventions for both Ollama and MLX-LM users
+5. Map all grounded-code collections the project type needs (see `AGENTS.md § grounded-code Collection Map`)
 
 ## When Adding a Package
 
 Follow `README.md § Add a new project-type package` exactly:
 1. Create directory structure
-2. Write skill, prompt templates, Modelfile
+2. Write skill (including `## Output format` section), prompt templates, Modelfile
 3. Symlink `shared/extensions/` into `packages/pi-<type>/extensions/`
 4. Add project-type signals to `shared/extensions/project-detect.ts`
 5. Run `npm run lint` — must pass before commit
+
+The Modelfile is Ollama-only. MLX-LM users get behavior rules from the skill file — no additional file needed.
 
 ## When Modifying a Shared Extension
 

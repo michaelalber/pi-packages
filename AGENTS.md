@@ -18,7 +18,7 @@
 ## Project Overview
 
 - **Name:** pi-packages
-- **Purpose:** Project-type-specific harnesses for the [Pi](https://pi.dev) (Earendil Inc.) coding agent backed by Ollama local inference. Each package ships a skill, prompt templates, TypeScript extensions, and an Ollama Modelfile tuned for its domain.
+- **Purpose:** Project-type-specific harnesses for the [Pi](https://pi.dev) (Earendil Inc.) coding agent backed by local inference (Ollama on all platforms; MLX-LM on Apple Silicon). Each package ships a skill, prompt templates, TypeScript extensions, and an Ollama Modelfile tuned for its domain.
 - **Phase:** Active development — implementing Phase 2 (core packages) through Phase 5 (npm publish + portfolio polish). See `ARCHITECTURE.md § 9 Implementation Phases`.
 - **Definition of success:** Every installed harness loads its skill automatically, calls `search_knowledge` via the RAG extension before generating code, routes tasks to the correct inference endpoint, and stays within the context budget — all without manual configuration.
 
@@ -27,7 +27,8 @@
 ## Technology Stack
 
 - **Agent platform:** Pi (pi.dev) — terminal coding harness with Ollama provider, skill system, TypeScript extensions, and prompt templates
-- **Inference backend:** Ollama (local) — GPU-accelerated models on Laptop (RTX 3060), PC (RTX 3080), and Mac Mini (Apple Silicon 48 GB)
+- **Inference backend (Ollama):** GPU-accelerated local inference on Laptop (RTX 3060), PC (RTX 3080), and optionally Mac Mini; port 11434
+- **Inference backend (MLX-LM):** Apple Silicon-native inference via `mlx_lm.server` on Mac Mini (M4 Pro, 48 GB unified); port 8080, OpenAI-compatible API. Model IDs use `mlx-community/*` HuggingFace quantized variants. Serves one model at a time — restart to switch.
 - **RAG / grounding:** grounded-code-mcp (local MCP server) — injects authoritative docs into every model call via `search_knowledge` / `search_code_examples`
 - **Extension language:** TypeScript — all extensions compiled via `tsconfig.json` at repo root
 - **Package manager:** npm workspaces — root `package.json` manages all five sub-packages
@@ -42,13 +43,13 @@
 - **Shared vs. package-level:**
   - `shared/extensions/` — canonical source for all four TypeScript extensions (rag, router, budget, project-detect); packages symlink in
   - `shared/prompts/` — base prompt templates; packages may override per-domain
-  - `shared/models/` — three model definition files (List A, List B, remote overrides)
+  - `shared/models/` — five model definition files: List A (Ollama), List B (Ollama), Tailscale Ollama override, MLX-LM Mac Mini, Tailscale MLX-LM override
   - `shared/types/pi.d.ts` — Pi ExtensionAPI TypeScript declarations
 - **Key directories:**
   - `packages/pi-<type>/skills/<type>.md` — skill invariants and grounded-code collection map
   - `packages/pi-<type>/prompts/` — five prompt templates: fix, review, generate, explain, decompose
   - `packages/pi-<type>/extensions/` — symlinks to `shared/extensions/`
-  - `packages/pi-<type>/modelfiles/<type>.Modelfile` — Ollama Modelfile (temperature 0.15, num_ctx, system prompt stub)
+  - `packages/pi-<type>/modelfiles/<type>.Modelfile` — Ollama convenience wrapper (temperature 0.15, num_ctx); behavior rules are authoritative in `skills/<type>.md`
   - `scripts/prepublish.js` — resolves symlinks before npm publish
 - **Routing logic:** `extensions/router.ts` switches models by message length — < 150 tokens stays local, 150–500 → PC, 500+ → Mac Mini
 - **Context budget:** `extensions/budget.ts` monitors token usage and triggers Pi auto-compact at 80% capacity
@@ -65,6 +66,8 @@
 | `shared/extensions/budget.ts` | Context window guard — prevents runaway inference costs and quality degradation |
 | `shared/extensions/project-detect.ts` | Auto-loads the right skill by detecting project signals (`.csproj`, `composer.json`, `pyproject.toml`, etc.) |
 | `packages/pi-dotnet/skills/dotnet.md` | Gold standard for skill authoring — highest-priority package (PSMD project) |
+| `shared/models/models-mac-mini-mlx.json` | MLX-LM Mac Mini model entries — mirrors mac-mini IDs from List A/B with `provider: mlx-lm` and port 8080 |
+| `shared/models/models-remote-mlx.json` | Tailscale VPN overrides for MLX-LM Mac Mini |
 | `shared/types/pi.d.ts` | Pi ExtensionAPI declarations — read before modifying any extension |
 | `intent.md` | Goals, values, tradeoff hierarchy, and persistent decisions for this repo |
 | `constraints.md` | Contribution constraints — read before any task |
@@ -114,17 +117,19 @@ These are the minimal rules every project-type harness inherits:
 | 2026-06-04 | Router threshold: 150 / 500 tokens for Laptop → PC → Mac Mini | Matches observed model capability ceilings: 7B for inline, 13B for small features, 22B+ for architecture |
 | 2026-06-04 | grounded-code-mcp is optional at install but strongly recommended | Graceful degradation: `search_knowledge` returns empty if MCP is absent; model falls back to training data |
 | 2026-06-04 | List A (US/EU) and List B (best overall) are separate model files, not flags | Different clients have different origin constraints; keeping files separate avoids conditional logic at runtime |
+| 2026-06-04 | MLX-LM model entries use the same `id` values as Ollama entries | Router extension and Pi model references stay stable; only `provider`, `baseUrl`, and `model` differ between backends |
+| 2026-06-04 | MLX-LM files are peer supplements, not replacements for existing model files | Ollama users touch nothing; Apple Silicon users swap in (or merge in) the MLX files |
+| 2026-06-04 | Skill files are the authoritative source for behavior rules; Modelfiles are Ollama-only convenience wrappers | MLX-LM has no Modelfile equivalent — system prompts must live in the skill file to be backend-agnostic |
 
 ---
 
 ## Open Loops
 
-- [ ] Phase 2 core packages — `pi-dotnet` is the priority (active PSMD project); remaining four in order: `pi-python`, `pi-php`, `pi-robotics`, `pi-industrial`
-- [ ] `shared/extensions/project-detect.ts` — needs project signals for all five project types before Phase 2 is complete
-- [ ] Phase 3 Modelfiles — all five are stubs; need temperature/num_ctx tuning per model tier after Phase 2 baseline is working
+- [x] Phase 2 core packages — all five packages implemented (`pi-dotnet`, `pi-python`, `pi-php`, `pi-robotics`, `pi-industrial`)
+- [x] Modelfiles — all five written with temperature 0.15, num_ctx, and full system prompts; behavior rules migrated to skill files as authoritative source
+- [ ] MLX-LM: `mlx_lm.server` serves one model at a time — no multi-model routing equivalent to Ollama; router extension always uses the currently-running model on port 8080
 - [ ] Phase 4 benchmarks — `ai-tools/benchmarks/eval_runner.py` and 20-question eval sets per project type not yet written
 - [ ] npm publish workflow — `scripts/prepublish.js` exists but packages have not been published; needs scoped npm account `@malber`
-- [ ] Pi skill for `pi-industrial` — content is mostly stubs; needs MODBUS/OPC UA/IEC 61131-3 invariants
 
 ---
 
@@ -171,9 +176,17 @@ Use this skill when working on <project-type description>.
 ## Quality gates
 - <measurable thresholds>
 
+## Output format
+- Code only in fenced code blocks
+- One file per block, filename as the block label
+- <test framework> test file before production file
+- Never output preamble or trailing summaries
+
 ## grounded-code collections for this project type
 - <collection-suffix> — <what it contains>
 ```
+
+The `## Output format` section is the authoritative substitute for the Modelfile `OUTPUT FORMAT` block. It ensures MLX-LM users (who receive no baked-in system prompt) get the same output conventions as Ollama users.
 
 ### Prompt Templates
 
@@ -183,7 +196,12 @@ Keep templates under 300 tokens — local models waste context on format overhea
 
 ### Modelfile
 
+Ollama-only convenience wrapper. The `SYSTEM` block should mirror the skill's invariants condensed to < 300 tokens. **Behavior rules are authoritative in `skills/<type>.md`** — the Modelfile bakes them in for Ollama users; MLX-LM users receive them via Pi's skill injection path instead.
+
 ```
+# NOTE: SYSTEM prompt content is authoritative in packages/pi-<type>/skills/<type>.md
+#       This file is an Ollama convenience wrapper only.
+#       MLX-LM users: see shared/models/models-mac-mini-mlx.json
 FROM <base-model>
 PARAMETER temperature 0.15
 PARAMETER top_p 0.9
@@ -191,7 +209,7 @@ PARAMETER top_k 40
 PARAMETER repeat_penalty 1.1
 PARAMETER num_ctx <32768 for Mac Mini, 8192 for PC/Laptop>
 PARAMETER num_predict 2048
-SYSTEM """<skill system prompt stub — copied from the skill file>"""
+SYSTEM """<condensed invariants from skills/<type>.md>"""
 ```
 
 ### grounded-code Collection Map
