@@ -1,0 +1,43 @@
+{
+  "name": "@malber/pi-rust",
+  "version": "0.1.0",
+  "description": "Pi coding harness for Rust — systems, embedded (embassy, rp-hal), CLI, Axum, and Rust robotics projects",
+  "license": "MIT",
+  "author": "Michael Alber",
+  "keywords": [
+    "pi",
+    "rust",
+    "embedded",
+    "axum",
+    "ollama",
+    "coding-agent",
+    "local-ai"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://codeberg.org/malber/pi-packages"
+  },
+  "scripts": {
+    "prepublishOnly": "node ../../scripts/prepublish.js pi-rust"
+  },
+  "pi": {
+    "name": "rust",
+    "description": "Rust — systems, embedded, CLI, Axum, robotics — with grounded-code-mcp RAG",
+    "skills": [
+      "skills/rust.md"
+    ],
+    "prompts": [
+      { "name": "fix",       "file": "prompts/fix.md" },
+      { "name": "review",    "file": "prompts/review.md" },
+      { "name": "generate",  "file": "prompts/generate.md" },
+      { "name": "explain",   "file": "prompts/explain.md" },
+      { "name": "decompose", "file": "prompts/decompose.md" }
+    ],
+    "extensions": [
+      "extensions/rag.ts",
+      "extensions/router.ts",
+      "extensions/budget.ts",
+      "extensions/project-detect.ts"
+    ]
+  }
+}

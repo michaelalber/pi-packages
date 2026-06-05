@@ -21,6 +21,8 @@ const SIGNALS: Signal[] = [
   { test: "ros2_ws", skill: "robotics" },
   { test: "package.xml", skill: "robotics" },
   { test: /plc_project\./i, skill: "industrial" },
+  { test: "Cargo.toml", skill: "rust" },
+  { test: "Cargo.lock", skill: "rust" },
 ];
 
 export default function(pi: ExtensionAPI) {
