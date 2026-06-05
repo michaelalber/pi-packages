@@ -2,7 +2,7 @@
   "name": "@malber/pi-packages",
   "version": "0.1.0",
   "private": true,
-  "description": "Pi coding harnesses for local Ollama inference — .NET, PHP, Python, Robotics, Industrial",
+  "description": "Pi coding harnesses for local Ollama inference — .NET, PHP, Python, Robotics, Industrial, Rust",
   "workspaces": [
     "packages/*"
   ],

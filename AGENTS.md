@@ -31,7 +31,7 @@
 - **Inference backend (MLX-LM):** Apple Silicon-native inference via `mlx_lm.server` on Mac Mini (M4 Pro, 48 GB unified); port 8080, OpenAI-compatible API. Model IDs use `mlx-community/*` HuggingFace quantized variants. Serves one model at a time — restart to switch.
 - **RAG / grounding:** grounded-code-mcp (local MCP server) — injects authoritative docs into every model call via `search_knowledge` / `search_code_examples`
 - **Extension language:** TypeScript — all extensions compiled via `tsconfig.json` at repo root
-- **Package manager:** npm workspaces — root `package.json` manages all five sub-packages
+- **Package manager:** npm workspaces — root `package.json` manages all six sub-packages
 - **Distribution:** `pi install git:codeberg.org/malber/pi-packages/packages/pi-<type>` (dev) or `npm:@malber/pi-<type>` (post-publish)
 - **Remote inference:** Tailscale MagicDNS — `mac-mini` resolves on LAN and VPN without IP changes
 
@@ -126,7 +126,7 @@ These are the minimal rules every project-type harness inherits:
 ## Open Loops
 
 - [x] Phase 2 core packages — all five packages implemented (`pi-dotnet`, `pi-python`, `pi-php`, `pi-robotics`, `pi-industrial`); `pi-rust` added as sixth package
-- [x] Modelfiles — all five written with temperature 0.15, num_ctx, and full system prompts; behavior rules migrated to skill files as authoritative source
+- [x] Modelfiles — all six written with temperature 0.15, num_ctx, and full system prompts; behavior rules migrated to skill files as authoritative source
 - [ ] MLX-LM: `mlx_lm.server` serves one model at a time — no multi-model routing equivalent to Ollama; router extension always uses the currently-running model on port 8080
 - [ ] Phase 4 benchmarks — `ai-tools/benchmarks/eval_runner.py` and 20-question eval sets per project type not yet written
 - [ ] npm publish workflow — `scripts/prepublish.js` exists but packages have not been published; needs scoped npm account `@malber`
@@ -227,7 +227,7 @@ SYSTEM """<condensed invariants from skills/<type>.md>"""
 ## Editing Guidelines
 
 - Read `shared/types/pi.d.ts` before modifying any extension — the ExtensionAPI surface is the contract.
-- When modifying a shared extension, test that all five packages still type-check: `npm run lint`.
+- When modifying a shared extension, test that all six packages still type-check: `npm run lint`.
 - Keep skills under 500 tokens total — local models have less tolerance for long instructions than cloud models.
 - Never add `require()` or `import` in extensions beyond what Pi's extension sandbox provides.
 - When adding a new package, follow the steps in `README.md § Add a new project-type package` exactly.
