@@ -56,7 +56,7 @@ The Modelfile is Ollama-only. MLX-LM users get behavior rules from the skill fil
 
 ## When Modifying a Shared Extension
 
-Shared extensions affect all five packages. After any change:
+Shared extensions affect all six packages. After any change:
 - Run `npm run lint` (type-check)
 - Manually test the affected extension in at least one package
 - Note the change in the Open Loops section of `AGENTS.md` if it is not yet fully validated
@@ -67,7 +67,10 @@ Shared extensions affect all five packages. After any change:
 # Always use prepublish.js — never npm publish directly
 node scripts/prepublish.js pi-dotnet
 node scripts/prepublish.js pi-php
-# etc.
+node scripts/prepublish.js pi-python
+node scripts/prepublish.js pi-robotics
+node scripts/prepublish.js pi-industrial
+node scripts/prepublish.js pi-rust
 ```
 
 `prepublish.js` resolves symlinks before publishing and restores them after. Bypassing it
