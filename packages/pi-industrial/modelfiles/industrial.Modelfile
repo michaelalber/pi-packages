@@ -1,5 +1,8 @@
 # Ollama Modelfile for Industrial Automation coding
 # Usage: ollama create industrial-coder -f packages/pi-industrial/modelfiles/industrial.Modelfile
+# NOTE: SYSTEM prompt content is authoritative in packages/pi-industrial/skills/industrial.md
+#       This file is an Ollama convenience wrapper only.
+#       MLX-LM users: see shared/models/models-mac-mini-mlx.json
 #
 # List A base (US/EU): llama3.3:70b on Mac Mini — swap FROM line for other machines:
 #   FROM phi4:14b          (PC — US origin, fits in 10 GB Q4)

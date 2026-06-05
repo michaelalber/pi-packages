@@ -1,0 +1,50 @@
+{
+  "description": "Mac Mini (Apple Silicon) — MLX-LM backend. Replaces mac-mini entries in models-best.json / models-us-eu.json for Apple Silicon hosts.",
+  "notes": [
+    "Requires: pip install mlx-lm",
+    "Start server: mlx_lm.server --model <model> --port 8080 --host 0.0.0.0",
+    "mlx_lm.server serves one model at a time — restart to switch models.",
+    "Mixed fleet (PC/Laptop on Ollama + Mac Mini on MLX): merge these mac-mini entries into your base models-best.json or models-us-eu.json.",
+    "Single Mac Mini only: use this file directly as ~/.pi/agent/models.json.",
+    "Embeddings: keep Ollama running only for nomic-embed-text (1.5 GB) — not worth replacing."
+  ],
+  "models": [
+    {
+      "id": "mac-mini/qwen2.5-coder:32b",
+      "provider": "mlx-lm",
+      "baseUrl": "http://mac-mini:8080",
+      "model": "mlx-community/Qwen2.5-Coder-32B-Instruct-4bit",
+      "notes": "#1 coding benchmarks — ~18 GB unified memory. mlx_lm.server --model mlx-community/Qwen2.5-Coder-32B-Instruct-4bit --port 8080 --host 0.0.0.0"
+    },
+    {
+      "id": "mac-mini/llama3.3:70b",
+      "provider": "mlx-lm",
+      "baseUrl": "http://mac-mini:8080",
+      "model": "mlx-community/Llama-3.3-70B-Instruct-4bit",
+      "notes": "Deep reasoning and architecture review — ~38 GB unified memory. Fits M4 Pro 48 GB."
+    },
+    {
+      "id": "mac-mini/codestral:22b",
+      "provider": "mlx-lm",
+      "baseUrl": "http://mac-mini:8080",
+      "model": "mlx-community/Codestral-22B-v0.1-4bit",
+      "notes": "Strong EU coding model — ~12 GB unified memory"
+    },
+    {
+      "id": "mac-mini/command-r:35b",
+      "provider": "mlx-lm",
+      "baseUrl": "http://mac-mini:8080",
+      "model": "mlx-community/c4ai-command-r-v01-4bit",
+      "notes": "RAG-heavy tasks, 128K context — ~19 GB unified memory"
+    }
+  ],
+  "embeddings": [
+    {
+      "id": "nomic-embed-text",
+      "provider": "ollama",
+      "baseUrl": "http://mac-mini:11434",
+      "model": "nomic-embed-text",
+      "notes": "Keep Ollama for embeddings only — 1.5 GB, no MLX-native replacement needed"
+    }
+  ]
+}

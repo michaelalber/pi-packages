@@ -1,5 +1,8 @@
 # Ollama Modelfile for Robotics coding
 # Usage: ollama create robotics-coder -f packages/pi-robotics/modelfiles/robotics.Modelfile
+# NOTE: SYSTEM prompt content is authoritative in packages/pi-robotics/skills/robotics.md
+#       This file is an Ollama convenience wrapper only.
+#       MLX-LM users: see shared/models/models-mac-mini-mlx.json
 #
 # List A base (US/EU): llama3.3:70b on Mac Mini — swap FROM line for other machines:
 #   FROM phi4:14b          (PC — US origin, fits in 10 GB Q4)

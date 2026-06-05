@@ -1,5 +1,8 @@
 # Ollama Modelfile for Python 3 coding
 # Usage: ollama create python-coder -f packages/pi-python/modelfiles/python.Modelfile
+# NOTE: SYSTEM prompt content is authoritative in packages/pi-python/skills/python.md
+#       This file is an Ollama convenience wrapper only.
+#       MLX-LM users: see shared/models/models-mac-mini-mlx.json
 #
 # List A base (US/EU): codestral:22b on Mac Mini — swap FROM line for other machines:
 #   FROM qwen2.5-coder:32b   (Mac Mini — List B best overall)

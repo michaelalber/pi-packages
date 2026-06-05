@@ -38,6 +38,12 @@ Use this skill when working on .NET, C#, ASP.NET Core, Entity Framework Core, SQ
 - Name migrations descriptively: `AddUserEmailIndex`, not `Migration001`
 - Test migrations in a separate step — coordinate with the database owner
 
+## Output format
+- Code only in fenced code blocks
+- One file per block, filename as the block label
+- xUnit test file before production file
+- Never output preamble or trailing summaries
+
 ## grounded-code collections for this project type
 | Collection | Use for |
 |---|---|

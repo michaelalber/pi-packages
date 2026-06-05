@@ -1,0 +1,24 @@
+{
+  "description": "Tailscale / VPN overrides for MLX-LM Mac Mini — use when MagicDNS short names don't resolve outside the tailnet.",
+  "notes": "In most Tailscale setups, http://mac-mini:8080 works everywhere. Use this file only if it doesn't. Replace tail12345 with your actual tailnet name from tailscale status.",
+  "models": [
+    {
+      "id": "mac-mini/qwen2.5-coder:32b",
+      "provider": "mlx-lm",
+      "baseUrl": "http://mac-mini.tail12345.ts.net:8080",
+      "model": "mlx-community/Qwen2.5-Coder-32B-Instruct-4bit"
+    },
+    {
+      "id": "mac-mini/llama3.3:70b",
+      "provider": "mlx-lm",
+      "baseUrl": "http://mac-mini.tail12345.ts.net:8080",
+      "model": "mlx-community/Llama-3.3-70B-Instruct-4bit"
+    },
+    {
+      "id": "mac-mini/codestral:22b",
+      "provider": "mlx-lm",
+      "baseUrl": "http://mac-mini.tail12345.ts.net:8080",
+      "model": "mlx-community/Codestral-22B-v0.1-4bit"
+    }
+  ]
+}

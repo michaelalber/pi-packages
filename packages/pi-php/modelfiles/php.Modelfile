@@ -1,5 +1,8 @@
 # Ollama Modelfile for PHP / Laravel / Vue.js coding
 # Usage: ollama create php-coder -f packages/pi-php/modelfiles/php.Modelfile
+# NOTE: SYSTEM prompt content is authoritative in packages/pi-php/skills/php.md
+#       This file is an Ollama convenience wrapper only.
+#       MLX-LM users: see shared/models/models-mac-mini-mlx.json
 #
 # List A base (US/EU): codestral:22b — swap FROM line for alternatives:
 #   FROM phi4:14b             (PC — US origin, ~9 GB Q4)

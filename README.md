@@ -1,8 +1,8 @@
 # pi-packages
 
-Project-type harnesses for [Pi](https://pi.dev) (Earendil Inc.) — a local coding agent backed by [Ollama](https://ollama.com) inference.
+Project-type harnesses for [Pi](https://pi.dev) (Earendil Inc.) — a local coding agent backed by local inference. Supports [Ollama](https://ollama.com) on all platforms and [MLX-LM](https://github.com/ml-explore/mlx-lm) on Apple Silicon.
 
-Each harness package ships a **skill** (behavior rules), **prompt templates** (fix/review/generate/explain/decompose), **TypeScript extensions** (RAG, routing, context budget), and an **Ollama Modelfile** tuned for the project type.
+Each harness package ships a **skill** (behavior rules + output format), **prompt templates** (fix/review/generate/explain/decompose), **TypeScript extensions** (RAG, routing, context budget), and an **Ollama Modelfile** tuned for the project type. Modelfiles are Ollama-only convenience wrappers; the skill file is the authoritative source for all behavior rules.
 
 **Available packages**
 
@@ -22,7 +22,8 @@ Each harness package ships a **skill** (behavior rules), **prompt templates** (f
 |---|---|---|
 | [Node.js](https://nodejs.org) | 20 LTS | `nvm install 20` |
 | [Pi agent](https://pi.dev) | 1.x | See below |
-| [Ollama](https://ollama.com) | latest | See below |
+| [Ollama](https://ollama.com) | latest | See below — all platforms |
+| [MLX-LM](https://github.com/ml-explore/mlx-lm) | latest | `pip install mlx-lm` — Apple Silicon only |
 | Git | any | system package manager |
 
 ### Install Pi
@@ -53,15 +54,20 @@ Choose the model list that matches your environment:
 
 | File | Use when |
 |---|---|
-| `shared/models/models-us-eu.json` | Restricted clients — US/EU origin models only |
-| `shared/models/models-best.json` | Best quality regardless of model origin |
-| `shared/models/models-remote.json` | Tailscale VPN override (if MagicDNS short names don't resolve) |
+| `shared/models/models-us-eu.json` | Restricted clients — US/EU origin models only (Ollama) |
+| `shared/models/models-best.json` | Best quality regardless of model origin (Ollama) |
+| `shared/models/models-remote.json` | Tailscale VPN override for Ollama Mac Mini |
+| `shared/models/models-mac-mini-mlx.json` | Mac Mini on Apple Silicon — MLX-LM backend |
+| `shared/models/models-remote-mlx.json` | Tailscale VPN override for MLX-LM Mac Mini |
 
-| Machine | VRAM | Recommended primary model |
+**Mixed fleet (PC/Laptop on Ollama + Mac Mini on MLX-LM):** start from `models-best.json`, then replace the `mac-mini/*` entries with the entries from `models-mac-mini-mlx.json`.
+
+| Machine | Backend | Recommended primary model |
 |---|---|---|
-| Laptop (RTX 3060) | 6 GB | `granite-code:8b` / `qwen2.5-coder:7b` |
-| PC (RTX 3080) | 10 GB | `phi4:14b` / `qwen2.5-coder:14b` |
-| Mac Mini (Apple Silicon) | 48 GB unified | `granite-code:34b` / `qwen2.5-coder:32b` |
+| Laptop (RTX 3060) | Ollama | `granite-code:8b` / `qwen2.5-coder:7b` |
+| PC (RTX 3080) | Ollama | `phi4:14b` / `qwen2.5-coder:14b` |
+| Mac Mini (Apple Silicon) | Ollama | `granite-code:34b` / `qwen2.5-coder:32b` |
+| Mac Mini (Apple Silicon) | MLX-LM | `Qwen2.5-Coder-32B-Instruct-4bit` (~18 GB) |
 
 ---
 
@@ -114,7 +120,41 @@ curl http://mac-mini:11434/api/tags
 
 If you use Tailscale, `mac-mini` resolves via MagicDNS on both LAN and VPN automatically.
 
-### 4. Register Modelfiles with Ollama
+### 4a. Mac Mini: MLX-LM setup (Apple Silicon — alternative to Ollama)
+
+If your Mac Mini runs Apple Silicon, MLX-LM gives better throughput than Ollama by using Metal natively.
+
+```bash
+# Install
+pip install mlx-lm
+
+# First run downloads the model automatically (~18 GB for 32B 4-bit)
+mlx_lm.server \
+  --model mlx-community/Qwen2.5-Coder-32B-Instruct-4bit \
+  --port 8080 \
+  --host 0.0.0.0
+```
+
+`mlx_lm.server` serves one model at a time. Restart with a different `--model` to switch. Common models for this fleet:
+
+| Use case | Model | Approx size |
+|---|---|---|
+| Primary coding | `mlx-community/Qwen2.5-Coder-32B-Instruct-4bit` | ~18 GB |
+| Deep reasoning | `mlx-community/Llama-3.3-70B-Instruct-4bit` | ~38 GB |
+| EU coding / PHP | `mlx-community/Codestral-22B-v0.1-4bit` | ~12 GB |
+| RAG tasks | `mlx-community/c4ai-command-r-v01-4bit` | ~19 GB |
+
+Verify from your PC:
+```bash
+curl http://mac-mini:8080/v1/models
+```
+
+Keep Ollama running on the Mac Mini for embeddings only (`nomic-embed-text`, 1.5 GB):
+```bash
+ollama pull nomic-embed-text
+```
+
+### 4b. Register Modelfiles with Ollama
 
 Run the commands for the packages you use. Each creates a named custom model in Ollama:
 
@@ -136,12 +176,17 @@ Verify: `ollama list` — the new model names should appear.
 Copy the right model file to your Pi agent config directory:
 
 ```bash
-# List A (US/EU)
+# List A (US/EU) — Ollama
 cp shared/models/models-us-eu.json ~/.pi/agent/models.json
 
-# List B (best overall)
+# List B (best overall) — Ollama
 cp shared/models/models-best.json ~/.pi/agent/models.json
+
+# Mac Mini on MLX-LM only (single-machine setup)
+cp shared/models/models-mac-mini-mlx.json ~/.pi/agent/models.json
 ```
+
+**Mixed fleet (PC/Laptop on Ollama + Mac Mini on MLX-LM):** copy `models-best.json` as your base, then replace the `mac-mini/*` entries with the entries from `models-mac-mini-mlx.json`.
 
 Open `~/.pi/agent/models.json` and update `baseUrl` values to match your actual hostnames if needed.
 
@@ -238,9 +283,11 @@ pi-packages/
     prompts/                  Base prompt templates (project packages extend these)
       fix.md  review.md  generate.md  explain.md  decompose.md
     models/
-      models-us-eu.json       List A: US/EU origin models only
-      models-best.json        List B: best overall
-      models-remote.json      Tailscale VPN hostname overrides
+      models-us-eu.json           List A: US/EU origin models only (Ollama)
+      models-best.json            List B: best overall (Ollama)
+      models-remote.json          Tailscale VPN overrides (Ollama)
+      models-mac-mini-mlx.json    Mac Mini MLX-LM backend
+      models-remote-mlx.json      Tailscale VPN overrides (MLX-LM)
 
   packages/
     pi-dotnet/
@@ -254,7 +301,7 @@ pi-packages/
       prompts/                5 prompt templates (fix/review/generate/explain/decompose)
       extensions/             Symlinks → shared/extensions/
       modelfiles/
-        <type>.Modelfile      Ollama Modelfile (temperature, context, system prompt)
+        <type>.Modelfile      Ollama convenience wrapper (behavior rules are authoritative in skills/)
 ```
 
 ---
@@ -305,7 +352,11 @@ sudo tailscale up
 curl http://mac-mini:11434/api/tags
 ```
 
-If short names don't resolve outside your tailnet, copy `shared/models/models-remote.json` to `~/.pi/agent/models.json` and replace `tail12345` with your actual tailnet name from `tailscale status`.
+If short names don't resolve outside your tailnet:
+- **Ollama:** copy `shared/models/models-remote.json` to `~/.pi/agent/models.json`
+- **MLX-LM:** copy `shared/models/models-remote-mlx.json` to `~/.pi/agent/models.json`
+
+Replace `tail12345` with your actual tailnet name from `tailscale status`.
 
 ---
 

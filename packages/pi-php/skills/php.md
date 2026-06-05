@@ -43,6 +43,12 @@ Use this skill when working on PHP, Laravel, Eloquent ORM, or Vue.js / TypeScrip
 - Type all props and emits with TypeScript interfaces
 - Keep components under 200 lines — extract composables for reusable logic
 
+## Output format
+- Code only in fenced code blocks
+- One file per block, filename as the block label
+- Pest test file before production file
+- Never output preamble or trailing summaries
+
 ## grounded-code collections for this project type
 | Collection | Use for |
 |---|---|

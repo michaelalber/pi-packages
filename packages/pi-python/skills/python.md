@@ -44,6 +44,12 @@ Use this skill when working on Python 3, FastAPI, Flask, Pydantic, SQLAlchemy, p
 - Use `select()` expressions — never raw string SQL through the ORM
 - Name Alembic migrations descriptively: `add_user_email_index`, not `revision_001`
 
+## Output format
+- Code only in fenced code blocks
+- One file per block, filename as the block label
+- pytest test file before production file
+- Never output preamble or trailing summaries
+
 ## grounded-code collections for this project type
 | Collection | Use for |
 |---|---|

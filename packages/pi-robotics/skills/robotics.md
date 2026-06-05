@@ -57,6 +57,13 @@ Use this skill when working on Robotics — ROS 2 (Python or C++), physical simu
 - Safety-critical paths (actuator commands, e-stop): code coverage ≥ 95%
 - `colcon build --symlink-install` must pass before any PR
 
+## Output format
+- Code only in fenced code blocks
+- One file per block, filename as the block label
+- Test file before production file (pytest for Python nodes; `ament_cmake` / colcon test for C++ nodes)
+- Python markers: `# <AI-Generated START>` / `# <AI-Generated END>`; C++ markers: `// <AI-Generated START>` / `// <AI-Generated END>`
+- Never output preamble or trailing summaries
+
 ## grounded-code collections for this project type
 | Collection | Use for |
 |---|---|

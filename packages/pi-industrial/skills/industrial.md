@@ -54,6 +54,12 @@ Use this skill when working on Industrial Automation, SCADA/HMI, PLC programming
 - All public functions have docstrings documenting engineering units and valid ranges
 - Safety-critical paths: code coverage ≥ 95%
 
+## Output format
+- Code only in fenced code blocks
+- One file per block, filename as the block label
+- pytest test file before production file
+- Never output preamble or trailing summaries
+
 ## grounded-code collections for this project type
 | Collection | Use for |
 |---|---|

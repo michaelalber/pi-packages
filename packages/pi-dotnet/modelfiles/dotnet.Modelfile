@@ -1,5 +1,8 @@
 # Ollama Modelfile for .NET / C# coding
 # Usage: ollama create dotnet-coder -f packages/pi-dotnet/modelfiles/dotnet.Modelfile
+# NOTE: SYSTEM prompt content is authoritative in packages/pi-dotnet/skills/dotnet.md
+#       This file is an Ollama convenience wrapper only.
+#       MLX-LM users: see shared/models/models-mac-mini-mlx.json
 #
 # List A base (US/EU): granite-code:34b — swap FROM line for List B:
 #   FROM qwen2.5-coder:32b   (Mac Mini — best overall)
