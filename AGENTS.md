@@ -67,6 +67,7 @@
 | `packages/pi-dotnet/skills/dotnet.md` | Gold standard for skill authoring — highest-priority package (PSMD project) |
 | `shared/models/models-mac-mini-mlx.json` | MLX-LM Mac Mini model entries — mirrors mac-mini IDs from List A/B with `provider: mlx-lm` and port 8080 |
 | `shared/models/models-remote-mlx.json` | Tailscale VPN overrides for MLX-LM Mac Mini |
+| `shared/models/router-config.example.json` | Template for `~/.pi/agent/router-config.json` — user sets `medium` and `complex` model IDs for the router extension |
 | `shared/types/pi.d.ts` | Pi ExtensionAPI declarations — read before modifying any extension |
 | `intent.md` | Goals, values, tradeoff hierarchy, and persistent decisions for this repo |
 | `constraints.md` | Contribution constraints — read before any task |

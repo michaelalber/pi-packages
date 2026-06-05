@@ -1,0 +1,8 @@
+{
+  "_note": "Copy to ~/.pi/agent/router-config.json and set 'medium' and 'complex' to your active model IDs. _prefixed keys are ignored by the router.",
+  "_list_a_us_eu": "medium: pc/phi4:14b  |  complex: mac-mini/codestral:22b",
+  "_list_b_best":  "medium: pc/qwen2.5-coder:14b  |  complex: mac-mini/qwen2.5-coder:32b",
+  "_mlx_lm_note":  "MLX-LM uses the same IDs as Ollama — only the backend differs in models.json",
+  "medium":  "pc/phi4:14b",
+  "complex": "mac-mini/codestral:22b"
+}
