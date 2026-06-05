@@ -13,6 +13,7 @@ Each harness package ships a **skill** (behavior rules + output format), **promp
 | `pi-python` | Python / FastAPI / SQLAlchemy / pytest |
 | `pi-robotics` | ROS 2 / Python / C++ / edge AI / MuJoCo / Isaac Lab / LeRobot |
 | `pi-industrial` | MODBUS / OPC UA / PLC (IEC 61131-3) / SCADA / ICS security |
+| `pi-rust` | Rust — systems, embedded (embassy, rp-hal), CLI, Axum, robotics (rclrs) |
 
 ---
 
@@ -165,6 +166,7 @@ ollama create php-coder         -f packages/pi-php/modelfiles/php.Modelfile
 ollama create python-coder      -f packages/pi-python/modelfiles/python.Modelfile
 ollama create robotics-coder    -f packages/pi-robotics/modelfiles/robotics.Modelfile
 ollama create industrial-coder  -f packages/pi-industrial/modelfiles/industrial.Modelfile
+ollama create rust-coder        -f packages/pi-rust/modelfiles/rust.Modelfile
 ```
 
 Each Modelfile defaults to the Mac Mini base model. Swap the `FROM` line before running if you are on the PC (`phi4:14b`) or Laptop (`phi3.5:3.8b`).
@@ -206,6 +208,7 @@ pi install git:codeberg.org/malber/pi-packages/packages/pi-php
 pi install git:codeberg.org/malber/pi-packages/packages/pi-python
 pi install git:codeberg.org/malber/pi-packages/packages/pi-robotics
 pi install git:codeberg.org/malber/pi-packages/packages/pi-industrial
+pi install git:codeberg.org/malber/pi-packages/packages/pi-rust
 ```
 
 **From npm (after publishing):**
@@ -216,9 +219,10 @@ pi install npm:@malber/pi-php
 pi install npm:@malber/pi-python
 pi install npm:@malber/pi-robotics
 pi install npm:@malber/pi-industrial
+pi install npm:@malber/pi-rust
 ```
 
-Install only the packages relevant to your projects — you do not need all five.
+Install only the packages relevant to your projects — you do not need all six.
 
 Verify: `pi skills` — the installed skill names should appear in the list.
 
@@ -234,9 +238,10 @@ Verify: `pi skills` — the installed skill names should appear in the list.
 /skill:python       Python / FastAPI / SQLAlchemy / pytest
 /skill:robotics     ROS 2 / edge AI / MuJoCo / Isaac Lab
 /skill:industrial   MODBUS / OPC UA / PLC / SCADA
+/skill:rust         Rust — systems, embedded, CLI, Axum, robotics
 ```
 
-`project-detect` loads the right skill automatically based on project signals (`.csproj`, `composer.json`, `pyproject.toml`, `package.xml`, `Makefile` with MODBUS/OPC patterns). Use the explicit `/skill:` command to override.
+`project-detect` loads the right skill automatically based on project signals (`.csproj`, `composer.json`, `pyproject.toml`, `package.xml`, `Makefile` with MODBUS/OPC patterns, `Cargo.toml`). Use the explicit `/skill:` command to override.
 
 ### Run a prompt template
 
@@ -295,6 +300,7 @@ pi-packages/
     pi-python/
     pi-robotics/
     pi-industrial/
+    pi-rust/
       Each package contains:
       package.json            Pi manifest + npm metadata
       skills/<type>.md        Skill: invariants and grounded-code collection map
