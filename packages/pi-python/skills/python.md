@@ -1,3 +1,10 @@
+---
+name: python
+description: >
+  Python 3, FastAPI, Flask, Pydantic v2, SQLAlchemy, pytest, and asyncio development.
+  Use when working on Python projects, APIs, data models, async code, or database access.
+---
+
 # python
 
 Use this skill when working on Python 3, FastAPI, Flask, Pydantic, SQLAlchemy, pytest, or asyncio projects.

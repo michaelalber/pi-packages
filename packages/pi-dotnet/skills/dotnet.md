@@ -1,3 +1,10 @@
+---
+name: dotnet
+description: >
+  .NET, C#, ASP.NET Core, Entity Framework Core, and React / TypeScript development.
+  Use when working on .NET projects, Web APIs, EF Core models, or React frontends.
+---
+
 # dotnet
 
 Use this skill when working on .NET, C#, ASP.NET Core, Entity Framework Core, SQL Server, or React / TypeScript projects.

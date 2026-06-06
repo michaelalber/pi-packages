@@ -1,3 +1,10 @@
+---
+name: php
+description: >
+  PHP, Laravel, Eloquent ORM, and Vue.js / TypeScript development.
+  Use when working on PHP projects, Laravel APIs, Eloquent models, or Vue components.
+---
+
 # php
 
 Use this skill when working on PHP, Laravel, Eloquent ORM, or Vue.js / TypeScript projects.
