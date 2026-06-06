@@ -89,13 +89,13 @@ ollama pull qwen3-coder:30b       # PC primary — MoE, fits 10 GB VRAM, 256K co
 ollama pull devstral:24b          # PC agentic — multi-file edits, 256K context
 ollama pull qwen2.5-coder:14b     # PC lighter option
 ollama pull qwen2.5-coder:7b      # Laptop / fast fallback
-ollama pull nomic-embed-text      # embeddings — required for RAG
+ollama pull snowflake-arctic-embed2  # embeddings — required for grounded-code-mcp RAG
 
 # List A — US/EU origin only (models-us-eu.json)
 ollama pull phi4:14b              # PC primary
 ollama pull granite-code:8b       # Laptop / fallback
 ollama pull phi3.5:3.8b           # ultrafast fallback
-ollama pull nomic-embed-text      # embeddings — required for RAG
+ollama pull snowflake-arctic-embed2  # embeddings — required for grounded-code-mcp RAG
 ```
 
 Mac Mini (MLX-LM): models download automatically on first `mlx_lm.server` run — no `ollama pull` needed.
@@ -157,7 +157,7 @@ mlx_lm.server \
 Keep Ollama running on the Mac Mini for embeddings only:
 
 ```bash
-ollama pull nomic-embed-text
+ollama pull snowflake-arctic-embed2   # grounded-code-mcp RAG embeddings
 ```
 
 Verify MLX-LM from PC: `curl http://mac-mini:8080/v1/models`
