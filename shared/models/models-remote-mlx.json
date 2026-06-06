@@ -1,24 +1,41 @@
 {
-  "description": "Tailscale / VPN overrides for MLX-LM Mac Mini — use when MagicDNS short names don't resolve outside the tailnet.",
-  "notes": "In most Tailscale setups, http://mac-mini:8080 works everywhere. Use this file only if it doesn't. Replace tail12345 with your actual tailnet name from tailscale status.",
-  "models": [
-    {
-      "id": "mac-mini/qwen2.5-coder:32b",
-      "provider": "mlx-lm",
-      "baseUrl": "http://mac-mini.tail12345.ts.net:8080",
-      "model": "mlx-community/Qwen2.5-Coder-32B-Instruct-4bit"
-    },
-    {
-      "id": "mac-mini/llama3.3:70b",
-      "provider": "mlx-lm",
-      "baseUrl": "http://mac-mini.tail12345.ts.net:8080",
-      "model": "mlx-community/Llama-3.3-70B-Instruct-4bit"
-    },
-    {
-      "id": "mac-mini/codestral:22b",
-      "provider": "mlx-lm",
-      "baseUrl": "http://mac-mini.tail12345.ts.net:8080",
-      "model": "mlx-community/Codestral-22B-v0.1-4bit"
+  "_description": "Tailscale / VPN overrides for MLX-LM Mac Mini. Merge the 'mlx-lm-mac-mini' block into your base models.json providers object.",
+  "_notes": "In most Tailscale setups http://mac-mini:8080 works everywhere. Use this file only if MagicDNS short names don't resolve outside the tailnet. Replace tail12345 with your actual tailnet name from tailscale status.",
+  "providers": {
+    "mlx-lm-mac-mini": {
+      "baseUrl": "http://mac-mini.tail12345.ts.net:8080/v1",
+      "api": "openai-completions",
+      "apiKey": "none",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false
+      },
+      "models": [
+        {
+          "id": "mac-mini/qwen2.5-coder:32b",
+          "name": "Qwen2.5 Coder 32B 4-bit (MLX)",
+          "_model": "mlx-community/Qwen2.5-Coder-32B-Instruct-4bit",
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 4096
+        },
+        {
+          "id": "mac-mini/llama3.3:70b",
+          "name": "Llama 3.3 70B 4-bit (MLX)",
+          "_model": "mlx-community/Llama-3.3-70B-Instruct-4bit",
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 4096
+        },
+        {
+          "id": "mac-mini/codestral:22b",
+          "name": "Codestral 22B 4-bit (MLX)",
+          "_model": "mlx-community/Codestral-22B-v0.1-4bit",
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 4096
+        }
+      ]
     }
-  ]
+  }
 }

@@ -175,22 +175,31 @@ Verify: `ollama list` — the new model names should appear.
 
 ### 5. Configure Pi models
 
-Copy the right model file to your Pi agent config directory:
+The model files use Pi's `providers` runtime format. Choose your setup:
 
+**Single machine (PC or Laptop on Ollama):**
 ```bash
-# List A (US/EU) — Ollama
+# List A (US/EU restricted clients)
 cp shared/models/models-us-eu.json ~/.pi/agent/models.json
 
-# List B (best overall) — Ollama
+# List B (best overall)
 cp shared/models/models-best.json ~/.pi/agent/models.json
+```
 
-# Mac Mini on MLX-LM only (single-machine setup)
+**Mac Mini only (MLX-LM):**
+```bash
 cp shared/models/models-mac-mini-mlx.json ~/.pi/agent/models.json
 ```
 
-**Mixed fleet (PC/Laptop on Ollama + Mac Mini on MLX-LM):** copy `models-best.json` as your base, then replace the `mac-mini/*` entries with the entries from `models-mac-mini-mlx.json`.
+**Mixed fleet (PC/Laptop on Ollama + Mac Mini on Ollama or MLX-LM):**
 
-Open `~/.pi/agent/models.json` and update `baseUrl` values to match your actual hostnames if needed.
+Start from `models-best.json`, then merge the additional `providers` block from the appropriate remote file into the `providers` object:
+
+- Ollama Mac Mini (LAN / MagicDNS): merge `ollama-mac-mini` from `models-remote.json`
+- MLX-LM Mac Mini (LAN / MagicDNS): merge `mlx-lm-mac-mini` from `models-mac-mini-mlx.json`
+- Either over Tailscale without MagicDNS: use the corresponding `models-remote*.json` variant
+
+Update the `baseUrl` values if your hostnames differ, then update `router-config.json` to reference the `mac-mini/*` model IDs for the `complex` tier.
 
 ### 6. Connect grounded-code-mcp (optional but strongly recommended)
 

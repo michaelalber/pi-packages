@@ -1,25 +1,50 @@
 {
-  "description": "Tailscale / VPN overrides — use when MagicDNS short names don't resolve outside the tailnet",
-  "notes": "In most Tailscale setups, http://mac-mini:11434 works everywhere. Use this file only if it doesn't.",
-  "models": [
-    {
-      "id": "mac-mini/qwen2.5-coder:32b",
-      "provider": "ollama",
-      "baseUrl": "http://mac-mini.tail12345.ts.net:11434",
-      "model": "qwen2.5-coder:32b",
-      "notes": "Replace tail12345 with your actual tailnet name from tailscale status"
-    },
-    {
-      "id": "mac-mini/llama3.3:70b",
-      "provider": "ollama",
-      "baseUrl": "http://mac-mini.tail12345.ts.net:11434",
-      "model": "llama3.3:70b"
-    },
-    {
-      "id": "mac-mini/codestral:22b",
-      "provider": "ollama",
-      "baseUrl": "http://mac-mini.tail12345.ts.net:11434",
-      "model": "codestral:22b"
+  "_description": "Tailscale / VPN overrides — Mac Mini Ollama provider. Merge the 'ollama-mac-mini' block into your base models.json providers object.",
+  "_notes": "In most Tailscale setups http://mac-mini:11434 works everywhere. Use this file only if MagicDNS short names don't resolve outside the tailnet. Replace tail12345 with your actual tailnet name from tailscale status.",
+  "providers": {
+    "ollama-mac-mini": {
+      "baseUrl": "http://mac-mini.tail12345.ts.net:11434/v1",
+      "api": "openai-completions",
+      "apiKey": "ollama",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false
+      },
+      "models": [
+        {
+          "id": "mac-mini/qwen3-coder:30b",
+          "name": "Qwen3 Coder 30B (Mac Mini)",
+          "_notes": "Primary Mac Mini coding agent — MoE 256K context",
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 4096,
+          "reasoning": true
+        },
+        {
+          "id": "mac-mini/devstral:24b",
+          "name": "Devstral 24B (Mac Mini)",
+          "_notes": "Agentic fallback on Mac Mini — 256K context",
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 4096
+        },
+        {
+          "id": "mac-mini/llama3.3:70b",
+          "name": "Llama 3.3 70B (Mac Mini)",
+          "_notes": "Deep reasoning and architecture review",
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 4096
+        },
+        {
+          "id": "mac-mini/command-r:35b",
+          "name": "Command R 35B (Mac Mini)",
+          "_notes": "RAG-heavy tasks, 128K context",
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 4096
+        }
+      ]
     }
-  ]
+  }
 }

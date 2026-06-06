@@ -1,70 +1,41 @@
 {
-  "description": "List A — US/EU origin models only (for restricted clients)",
-  "models": [
-    {
-      "id": "laptop/granite-code:8b",
-      "provider": "ollama",
-      "baseUrl": "http://localhost:11434",
-      "model": "granite-code:8b",
-      "notes": "Fast completions on RTX 3060 (6 GB VRAM)"
-    },
-    {
-      "id": "laptop/phi3.5:3.8b",
-      "provider": "ollama",
-      "baseUrl": "http://localhost:11434",
-      "model": "phi3.5:3.8b",
-      "notes": "Ultrafast, 128K context, small footprint"
-    },
-    {
-      "id": "pc/phi4:14b",
-      "provider": "ollama",
-      "baseUrl": "http://localhost:11434",
-      "model": "phi4:14b",
-      "notes": "Primary dev model on RTX 3080 (10 GB VRAM), tight at Q4"
-    },
-    {
-      "id": "pc/granite-code:8b",
-      "provider": "ollama",
-      "baseUrl": "http://localhost:11434",
-      "model": "granite-code:8b",
-      "notes": "Fast fallback on PC"
-    },
-    {
-      "id": "mac-mini/codestral:22b",
-      "provider": "ollama",
-      "baseUrl": "http://mac-mini:11434",
-      "model": "codestral:22b",
-      "notes": "Primary Mac Mini model — best EU coding model"
-    },
-    {
-      "id": "mac-mini/granite-code:34b",
-      "provider": "ollama",
-      "baseUrl": "http://mac-mini:11434",
-      "model": "granite-code:34b",
-      "notes": "Enterprise: C#, Java, SQL — US origin"
-    },
-    {
-      "id": "mac-mini/llama3.3:70b",
-      "provider": "ollama",
-      "baseUrl": "http://mac-mini:11434",
-      "model": "llama3.3:70b",
-      "notes": "Deep reasoning and architecture review (~40 GB Q4)"
-    },
-    {
-      "id": "mac-mini/command-r:35b",
-      "provider": "ollama",
-      "baseUrl": "http://mac-mini:11434",
-      "model": "command-r:35b",
-      "notes": "RAG-heavy tasks, 128K context"
+  "_description": "List A — US/EU origin models only (for restricted clients). Copy to ~/.pi/agent/models.json.",
+  "_mixed_fleet": "For PC + Mac Mini, also add the 'ollama-mac-mini' provider block from models-remote.json into the providers object.",
+  "providers": {
+    "ollama": {
+      "baseUrl": "http://localhost:11434/v1",
+      "api": "openai-completions",
+      "apiKey": "ollama",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false
+      },
+      "models": [
+        {
+          "id": "granite-code:8b",
+          "name": "Granite Code 8B",
+          "_notes": "Fast completions on Laptop / PC fallback — US origin",
+          "input": ["text"],
+          "contextWindow": 32768,
+          "maxTokens": 2048
+        },
+        {
+          "id": "phi3.5:3.8b",
+          "name": "Phi-3.5 3.8B",
+          "_notes": "Ultrafast fallback, 128K context — US origin",
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 2048
+        },
+        {
+          "id": "phi4:14b",
+          "name": "Phi-4 14B",
+          "_notes": "Primary PC model, tight at Q4 on RTX 3080 10 GB VRAM — US origin",
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 4096
+        }
+      ]
     }
-  ],
-  "embeddings": [
-    {
-      "id": "nomic-embed-text",
-      "provider": "ollama",
-      "baseUrl": "http://localhost:11434",
-      "model": "nomic-embed-text",
-      "notes": "All machines — fast, US/EU neutral origin"
-    }
-  ]
+  }
 }
