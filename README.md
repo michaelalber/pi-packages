@@ -10,6 +10,16 @@ Supports [Ollama](https://ollama.com) on all platforms and [MLX-LM](https://gith
 
 ---
 
+## Why I built this
+
+I wanted AI coding support that worked offline, kept my code local, and didn't require an API subscription. Ollama makes the inference side straightforward — getting reliable output from it turned out to be a different problem.
+
+Local models are smaller and don't self-correct the way cloud models do. The same approach that works well with Claude — open-ended prompts, loosely structured requests — produces mediocre results with a 14B model on consumer hardware. What I found works is the opposite: short, precise instruction files, RAG grounding before the model generates anything, and routing logic that sends more complex tasks to the most capable model available on the machine.
+
+pi-packages is the result of working through that problem for each stack I use regularly. Six project types, one consistent structure, all sharing the same four extensions.
+
+---
+
 ## Packages
 
 | Package | Project types |
@@ -390,8 +400,14 @@ pi-packages is the local inference layer: hardware routing, RAG integration, con
 
 ---
 
+## Author
+
+**Michael K. Alber** — [codeberg.org/michaelkalber](https://codeberg.org/michaelkalber)
+
+Software engineer working across enterprise .NET, Python, Rust, edge AI, and federal security domains. I'm actively integrating AI-assisted development into my daily workflow — these projects reflect what I've learned about making local inference reliable, grounded in real sources, and actually useful for the kind of work I do.
+
+---
+
 ## License
 
 MIT
-
-**Author:** Michael K. Alber | [codeberg.org/michaelkalber](https://codeberg.org/michaelkalber)
