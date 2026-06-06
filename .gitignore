@@ -3,3 +3,6 @@ dist/
 *.tsbuildinfo
 .npmrc
 .env
+__pycache__/
+*.pyc
+.pytest_cache/
