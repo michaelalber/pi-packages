@@ -44,7 +44,7 @@ Each package is composed of four parts that work together:
 **Prompt templates** (`prompts/`) — five structured templates (fix / review / generate / explain / decompose) that constrain the model's response shape. Structured output matters more with local models than with cloud models because local inference has less error correction.
 
 **TypeScript extensions** (`extensions/`) — four shared extensions wired into every package via symlinks:
-- `rag.ts` — calls `grounded-code-mcp` CLI subprocesses with `--json` output to inject vetted documentation before each response; 17 curated collections covering .NET, Python, Rust, architecture, security, AI/ML, edge AI, and robotics
+- `rag.ts` — calls `grounded-code-mcp` CLI via subprocess (`--json` output) to inject vetted documentation before each response; registers `search_knowledge` and `search_code_examples` tools that the model invokes before generating code
 - `router.ts` — routes by message length: fast local model under 150 tokens, mid-tier PC model to 500, heavy Mac Mini model above
 - `budget.ts` — monitors context window usage and triggers Pi auto-compact at 80% capacity
 - `project-detect.ts` — reads project signals (`.csproj`, `Cargo.toml`, `composer.json`, etc.) and loads the right skill without manual configuration
@@ -74,29 +74,31 @@ Verify installs: `pi --version` / `ollama --version`
 ### 1. Clone and install
 
 ```bash
-git clone https://codeberg.org/malber/pi-packages.git
+git clone https://codeberg.org/michaelkalber/pi-packages.git
 cd pi-packages
 npm install
 ```
 
 ### 2. Pull Ollama models
 
-Pull models for your hardware tier:
+Pull the models for your list and hardware tier. Choose List B for best quality or List A if your project requires US/EU origin models only.
 
 ```bash
-# Mac Mini (primary + deep reasoning)
-ollama pull granite-code:34b
-ollama pull llama3.3:70b
-ollama pull nomic-embed-text       # embeddings — required for RAG
+# List B — best overall (models-best.json)
+ollama pull qwen3-coder:30b       # PC primary — MoE, fits 10 GB VRAM, 256K context
+ollama pull devstral:24b          # PC agentic — multi-file edits, 256K context
+ollama pull qwen2.5-coder:14b     # PC lighter option
+ollama pull qwen2.5-coder:7b      # Laptop / fast fallback
+ollama pull nomic-embed-text      # embeddings — required for RAG
 
-# PC (RTX 3080)
-ollama pull phi4:14b
-ollama pull granite-code:8b
-
-# Laptop (RTX 3060)
-ollama pull granite-code:8b
-ollama pull phi3.5:3.8b
+# List A — US/EU origin only (models-us-eu.json)
+ollama pull phi4:14b              # PC primary
+ollama pull granite-code:8b       # Laptop / fallback
+ollama pull phi3.5:3.8b           # ultrafast fallback
+ollama pull nomic-embed-text      # embeddings — required for RAG
 ```
+
+Mac Mini (MLX-LM): models download automatically on first `mlx_lm.server` run — no `ollama pull` needed.
 
 ### 3. Hardware & model selection
 
@@ -110,12 +112,13 @@ Choose the model list that matches your environment:
 | `shared/models/models-mac-mini-mlx.json` | Mac Mini on Apple Silicon — MLX-LM backend |
 | `shared/models/models-remote-mlx.json` | Tailscale VPN — MLX-LM Mac Mini |
 
-| Machine | Backend | Recommended primary model |
-|---|---|---|
-| Laptop (RTX 3060) | Ollama | `granite-code:8b` / `qwen2.5-coder:7b` |
-| PC (RTX 3080) | Ollama | `phi4:14b` / `qwen2.5-coder:14b` |
-| Mac Mini (Apple Silicon) | Ollama | `granite-code:34b` / `qwen2.5-coder:32b` |
-| Mac Mini (Apple Silicon) | MLX-LM | `Qwen2.5-Coder-32B-Instruct-4bit` (~18 GB) |
+| Machine | List | Backend | Recommended primary model |
+|---|---|---|---|
+| Laptop (RTX 3060) | List A | Ollama | `granite-code:8b` / `phi3.5:3.8b` |
+| Laptop (RTX 3060) | List B | Ollama | `qwen2.5-coder:7b` |
+| PC (RTX 3080) | List A | Ollama | `phi4:14b` |
+| PC (RTX 3080) | List B | Ollama | `qwen3-coder:30b` / `devstral:24b` |
+| Mac Mini (Apple Silicon) | — | MLX-LM | `Qwen2.5-Coder-32B-Instruct-4bit` (~18 GB) |
 
 ### 4a. Mac Mini: expose Ollama for network inference
 
@@ -170,7 +173,7 @@ ollama create industrial-coder  -f packages/pi-industrial/modelfiles/industrial.
 ollama create rust-coder        -f packages/pi-rust/modelfiles/rust.Modelfile
 ```
 
-Each Modelfile defaults to the Mac Mini base model. Edit the `FROM` line before running if you are on the PC (`phi4:14b`) or Laptop (`phi3.5:3.8b`).
+All Modelfiles default to `FROM qwen3-coder:30b` (PC primary — MoE, fits 10 GB VRAM). Edit the `FROM` line for other targets; the comments at the top of each Modelfile list the alternatives for each hardware tier and list.
 
 Verify: `ollama list`
 
@@ -189,11 +192,11 @@ cp shared/models/models-mac-mini-mlx.json ~/.pi/agent/models.json
 
 **Mixed fleet:** Start from `models-best.json`, then merge the appropriate remote provider block into the `providers` object — `ollama-mac-mini` from `models-remote.json` or `mlx-lm-mac-mini` from `models-mac-mini-mlx.json`. Update `router-config.json` to reference the `mac-mini/*` model IDs for the `complex` tier.
 
-### 7. Install grounded-code-mcp and the Pi extension
+### 7. Install grounded-code-mcp
 
-[grounded-code-mcp](https://codeberg.org/michaelkalber/grounded-code-mcp) is a local RAG server that gives Pi retrieval access to a curated knowledge base — books, standards documents, and official docs stored as local vector embeddings. The RAG extension calls it before every model response. Without it, the extension is registered but returns empty results and the model falls back to training data alone.
+[grounded-code-mcp](https://codeberg.org/michaelkalber/grounded-code-mcp) is a local RAG server that gives Pi retrieval access to a curated knowledge base — books, standards documents, and official docs stored as local vector embeddings. The `rag.ts` extension calls its CLI directly via subprocess; no MCP server process or separate Pi extension is needed.
 
-**Install the server:**
+**Install:**
 
 ```bash
 pipx install git+https://codeberg.org/michaelkalber/grounded-code-mcp.git
@@ -206,38 +209,25 @@ ollama pull snowflake-arctic-embed2          # embedding model (1024-dim, 8K con
 docker run -d -p 6333:6333 qdrant/qdrant     # vector store
 ```
 
-**Install the Pi extension:**
+Ingest your sources, then verify the CLI works:
 
 ```bash
-# From a local clone
-pi install /path/to/grounded-code-mcp/skill/extensions
-
-# Or directly from Codeberg
-pi install git:codeberg.org/michaelkalber/grounded-code-mcp?path=skill
+grounded-code-mcp ingest
+grounded-code-mcp search "async cancellation token" --collection dotnet --json
 ```
 
-The Pi extension runs `grounded-code-mcp` CLI subprocesses with `--json` output — no separate MCP server process is needed. It exposes five tools:
-
-| Tool | What it does |
-|---|---|
-| `grounded_search` | Vector search across all or one collection |
-| `grounded_search_code` | Code-block search with optional language filter |
-| `grounded_list_sources` | Lists every ingested document |
-| `grounded_source_info` | Metadata for a specific source |
-| `grounded_query_graph` | Concept graph traversal — finds relationships between concepts |
-
-Verify: `pi list` — the grounded-code extension should appear.
+Without grounded-code-mcp installed and ingested, `search_knowledge` and `search_code_examples` return an unavailability message and the model falls back to training data alone. See [grounded-code-mcp](https://codeberg.org/michaelkalber/grounded-code-mcp) for the full ingestion and collection setup guide.
 
 ### 8. Install packages into Pi
 
 **From git (no npm account required):**
 ```bash
-pi install git:codeberg.org/malber/pi-packages/packages/pi-dotnet
-pi install git:codeberg.org/malber/pi-packages/packages/pi-php
-pi install git:codeberg.org/malber/pi-packages/packages/pi-python
-pi install git:codeberg.org/malber/pi-packages/packages/pi-robotics
-pi install git:codeberg.org/malber/pi-packages/packages/pi-industrial
-pi install git:codeberg.org/malber/pi-packages/packages/pi-rust
+pi install git:codeberg.org/michaelkalber/pi-packages/packages/pi-dotnet
+pi install git:codeberg.org/michaelkalber/pi-packages/packages/pi-php
+pi install git:codeberg.org/michaelkalber/pi-packages/packages/pi-python
+pi install git:codeberg.org/michaelkalber/pi-packages/packages/pi-robotics
+pi install git:codeberg.org/michaelkalber/pi-packages/packages/pi-industrial
+pi install git:codeberg.org/michaelkalber/pi-packages/packages/pi-rust
 ```
 
 **From npm:**

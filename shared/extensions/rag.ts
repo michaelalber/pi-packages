@@ -1,4 +1,10 @@
 // <AI-Generated START>
+// RAG extension: calls grounded-code-mcp CLI with --json output to inject
+// vetted documentation before the model generates code.
+// Requires: pipx install grounded-code-mcp (see grounded-code-mcp for setup)
+
+import { spawnSync } from "child_process";
+
 export default function(pi: ExtensionAPI) {
   pi.registerTool({
     name: "search_knowledge",
@@ -20,15 +26,19 @@ export default function(pi: ExtensionAPI) {
       }
     },
     execute: async ({ query, collection, n_results }) => {
-      const params: Record<string, unknown> = {
-        query,
-        n_results: n_results ?? 3,
-        min_score: 0.5
-      };
-      if (collection) params["collection"] = collection;
+      const args = [
+        "search", String(query),
+        "--json",
+        "-n", String(n_results ?? 3),
+        "--min-score", "0.5"
+      ];
+      if (collection) args.push("--collection", String(collection));
 
-      const result = await pi.callMcp("grounded-code-mcp", "search_knowledge", params);
-      return formatChunks(result);
+      const proc = spawnSync("grounded-code-mcp", args, { encoding: "utf-8", timeout: 15000 });
+      if (proc.error || proc.status !== 0) {
+        return "[grounded-code-mcp unavailable — do not hallucinate; use [CANNOT COMPLETE] if uncertain]";
+      }
+      return formatChunks(JSON.parse(proc.stdout));
     }
   });
 
@@ -47,11 +57,14 @@ export default function(pi: ExtensionAPI) {
       }
     },
     execute: async ({ query, language }) => {
-      const params: Record<string, unknown> = { query, n_results: 2 };
-      if (language) params["language"] = language;
+      const args = ["search-code", String(query), "--json", "-n", "2"];
+      if (language) args.push("--language", String(language));
 
-      const result = await pi.callMcp("grounded-code-mcp", "search_code_examples", params);
-      return formatChunks(result);
+      const proc = spawnSync("grounded-code-mcp", args, { encoding: "utf-8", timeout: 15000 });
+      if (proc.error || proc.status !== 0) {
+        return "[grounded-code-mcp unavailable — do not hallucinate; use [CANNOT COMPLETE] if uncertain]";
+      }
+      return formatChunks(JSON.parse(proc.stdout));
     }
   });
 }
@@ -60,8 +73,8 @@ function formatChunks(result: unknown): string {
   if (!Array.isArray(result) || result.length === 0) {
     return "[No results found — do not hallucinate; use [CANNOT COMPLETE] if uncertain]";
   }
-  return result
-    .map((r: Record<string, unknown>) => `[Source: ${r["source_path"]}]\n${r["content"]}`)
+  return (result as Record<string, unknown>[])
+    .map(r => `[Source: ${r["source_path"]}]\n${r["content"]}`)
     .join("\n\n---\n\n");
 }
 // <AI-Generated END>
