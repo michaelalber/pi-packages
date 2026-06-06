@@ -1,0 +1,183 @@
+{
+  "package": "pi-dotnet",
+  "description": "20 questions covering output format, invariants, security, and task approach for the pi-dotnet skill.",
+  "questions": [
+    {
+      "id": "dn-001",
+      "category": "output_format",
+      "prompt": "Write a C# utility method FormatCurrency(decimal amount) that returns a USD string like $1,234.56.",
+      "checks": [
+        {"type": "has_code_block"},
+        {"type": "contains", "value": "// <AI-Generated START>"},
+        {"type": "contains", "value": "// <AI-Generated END>"}
+      ]
+    },
+    {
+      "id": "dn-002",
+      "category": "test_first",
+      "prompt": "Implement a C# service method CalculateOrderTotal(IEnumerable<OrderItem> items, decimal taxRate) that sums prices and applies tax.",
+      "checks": [
+        {"type": "first_code_block_contains", "value": "[Fact]"},
+        {"type": "contains", "value": "xunit"}
+      ]
+    },
+    {
+      "id": "dn-003",
+      "category": "invariants",
+      "prompt": "Write an ASP.NET Core controller action that fetches a user by ID from the database asynchronously.",
+      "checks": [
+        {"type": "contains", "value": "async Task"},
+        {"type": "contains", "value": "CancellationToken"},
+        {"type": "not_regex", "value": "\\.Result\\b|\\.Wait\\(\\)"}
+      ]
+    },
+    {
+      "id": "dn-004",
+      "category": "invariants",
+      "prompt": "Write an async C# service method that calls an external payment API with a timeout.",
+      "checks": [
+        {"type": "contains", "value": "CancellationToken"},
+        {"type": "contains", "value": "async Task"},
+        {"type": "not_regex", "value": "\\.Result\\b|\\.Wait\\(\\)"}
+      ]
+    },
+    {
+      "id": "dn-005",
+      "category": "invariants",
+      "prompt": "Write a C# method that reads a file and returns its contents as a string.",
+      "checks": [
+        {"type": "regex", "value": "using|await using"},
+        {"type": "not_regex", "value": "\\.Result\\b|\\.Wait\\(\\)"}
+      ]
+    },
+    {
+      "id": "dn-006",
+      "category": "security",
+      "prompt": "Write an EF Core LINQ query to find users whose email contains a search term provided by the caller.",
+      "checks": [
+        {"type": "not_regex", "value": "FromSqlRaw.*\\$\"|ExecuteSqlRaw.*\\+"},
+        {"type": "regex", "value": "\\.Where\\(|Contains\\("}
+      ]
+    },
+    {
+      "id": "dn-007",
+      "category": "invariants",
+      "prompt": "Write an EF Core LINQ query to load all active users for a read-only report page.",
+      "checks": [
+        {"type": "contains", "value": "AsNoTracking()"}
+      ]
+    },
+    {
+      "id": "dn-008",
+      "category": "invariants",
+      "prompt": "Write a C# class UserProfile with a nullable string property DisplayName.",
+      "checks": [
+        {"type": "regex", "value": "string\\?|#nullable enable"}
+      ]
+    },
+    {
+      "id": "dn-009",
+      "category": "invariants",
+      "prompt": "Write C# code that makes three HTTP calls in parallel and waits for all results.",
+      "checks": [
+        {"type": "contains", "value": "await"},
+        {"type": "not_regex", "value": "\\.Result\\b|\\.Wait\\(\\)"}
+      ]
+    },
+    {
+      "id": "dn-010",
+      "category": "invariants",
+      "prompt": "What should I name an EF Core migration that adds an index on the Users.Email column?",
+      "checks": [
+        {"type": "not_regex", "value": "Migration0*1[^0-9]"},
+        {"type": "regex", "value": "[Aa]dd.*[Ee]mail.*[Ii]ndex|[Aa]dd.*[Ii]ndex.*[Ee]mail"}
+      ]
+    },
+    {
+      "id": "dn-011",
+      "category": "invariants",
+      "prompt": "Write C# code to import a list of 1,000 orders and persist them all to the database.",
+      "checks": [
+        {"type": "not_regex", "value": "foreach[^{]*\\{[^}]*SaveChanges|for[^{]*\\{[^}]*SaveChanges"}
+      ]
+    },
+    {
+      "id": "dn-012",
+      "category": "invariants",
+      "prompt": "Write a public C# service method CalculateShippingCost(Order order, string destination) that estimates shipping.",
+      "checks": [
+        {"type": "regex", "value": "///|<summary>"}
+      ]
+    },
+    {
+      "id": "dn-013",
+      "category": "task_approach",
+      "prompt": "Build a complete CQRS feature for creating a product: command, handler, EF Core entity, and integration test.",
+      "checks": [
+        {"type": "regex", "value": "\\d+\\.\\s|step\\s"},
+        {"type": "code_block_max", "value": 3}
+      ]
+    },
+    {
+      "id": "dn-014",
+      "category": "invariants",
+      "prompt": "What .NET target framework should I use for a brand-new project today?",
+      "checks": [
+        {"type": "regex", "value": "net10|.NET 10"}
+      ]
+    },
+    {
+      "id": "dn-015",
+      "category": "invariants",
+      "prompt": "How should I organize the folder structure of a new ASP.NET Core project?",
+      "checks": [
+        {"type": "regex", "value": "[Ff]eature|[Vv]ertical [Ss]lice"}
+      ]
+    },
+    {
+      "id": "dn-016",
+      "category": "invariants",
+      "prompt": "I have a CQRS command that needs to return a list of the items it just created. Is that correct?",
+      "checks": [
+        {"type": "regex", "value": "query|separate|should not|shouldn't|avoid"}
+      ]
+    },
+    {
+      "id": "dn-017",
+      "category": "security",
+      "prompt": "Write EF Core code to delete all orders for a customer whose email is provided as a string parameter.",
+      "checks": [
+        {"type": "not_regex", "value": "ExecuteSqlRaw.*\\{|ExecuteSqlRaw.*\\+"},
+        {"type": "regex", "value": "\\.Where\\("}
+      ]
+    },
+    {
+      "id": "dn-018",
+      "category": "test_first",
+      "prompt": "Write an xUnit test that verifies CalculateOrderTotal returns 0 for an empty order.",
+      "checks": [
+        {"type": "contains", "value": "[Fact]"},
+        {"type": "contains", "value": "Assert."}
+      ]
+    },
+    {
+      "id": "dn-019",
+      "category": "invariants",
+      "prompt": "Write three async C# methods that call each other in sequence, each reading from the database.",
+      "checks": [
+        {"type": "contains", "value": "CancellationToken"},
+        {"type": "contains", "value": "async Task"}
+      ]
+    },
+    {
+      "id": "dn-020",
+      "category": "invariants",
+      "prompt": "Write a C# constructor for a service class OrderProcessor that depends on IOrderRepository and IPaymentGateway.",
+      "checks": [
+        {"type": "not_regex", "value": "new OrderRepository\\(\\)|new PaymentGateway\\(\\)"},
+        {"type": "contains", "value": "IOrderRepository"},
+        {"type": "contains", "value": "IPaymentGateway"}
+      ]
+    }
+  ]
+}

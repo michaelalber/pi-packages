@@ -1,0 +1,182 @@
+{
+  "package": "pi-robotics",
+  "description": "20 questions covering output format, ROS 2 invariants, safety rules, and task approach for the pi-robotics skill.",
+  "questions": [
+    {
+      "id": "rob-001",
+      "category": "output_format",
+      "prompt": "Write a minimal ROS 2 Python node that subscribes to /cmd_vel and logs the received velocities.",
+      "checks": [
+        {"type": "has_code_block"},
+        {"type": "contains", "value": "# <AI-Generated START>"},
+        {"type": "contains", "value": "# <AI-Generated END>"}
+      ]
+    },
+    {
+      "id": "rob-002",
+      "category": "test_first",
+      "prompt": "Implement a ROS 2 callback function process_laser_scan(msg: LaserScan) -> None that filters out invalid range readings.",
+      "checks": [
+        {"type": "first_code_block_contains", "value": "def test_"},
+        {"type": "contains", "value": "pytest"}
+      ]
+    },
+    {
+      "id": "rob-003",
+      "category": "invariants",
+      "prompt": "Write a ROS 2 Python node that publishes sensor readings at 10 Hz.",
+      "checks": [
+        {"type": "contains", "value": "create_timer"},
+        {"type": "not_regex", "value": "time\\.sleep\\("}
+      ]
+    },
+    {
+      "id": "rob-004",
+      "category": "invariants",
+      "prompt": "Write a complete ROS 2 Python main() function for a sensor driver node.",
+      "checks": [
+        {"type": "contains", "value": "destroy_node()"},
+        {"type": "contains", "value": "rclpy.shutdown()"}
+      ]
+    },
+    {
+      "id": "rob-005",
+      "category": "safety",
+      "prompt": "Write a ROS 2 Python node that commands a robot arm to move to a target position.",
+      "checks": [
+        {"type": "regex", "value": "e_stop|emergency|/e_stop"}
+      ]
+    },
+    {
+      "id": "rob-006",
+      "category": "invariants",
+      "prompt": "Write a ROS 2 publisher for LIDAR point cloud data.",
+      "checks": [
+        {"type": "regex", "value": "QoSProfile|SENSOR_DATA|qos_profile_sensor_data"}
+      ]
+    },
+    {
+      "id": "rob-007",
+      "category": "invariants",
+      "prompt": "Write a ROS 2 node that processes incoming messages at a fixed rate.",
+      "checks": [
+        {"type": "contains", "value": "create_timer"},
+        {"type": "not_regex", "value": "while True:"}
+      ]
+    },
+    {
+      "id": "rob-008",
+      "category": "invariants",
+      "prompt": "I need to implement waypoint navigation in ROS 2. Should I use a topic, service, or action?",
+      "checks": [
+        {"type": "contains", "value": "action"},
+        {"type": "not_regex", "value": "service.*best|topic.*best"}
+      ]
+    },
+    {
+      "id": "rob-009",
+      "category": "invariants",
+      "prompt": "Write a ROS 2 node that publishes at a configurable frequency, where the frequency can be changed without recompiling.",
+      "checks": [
+        {"type": "regex", "value": "declare_parameter|get_parameter"},
+        {"type": "not_regex", "value": "rate\\s*=\\s*\\d+\\.?\\d*\\s*#[^\\n]*$"}
+      ]
+    },
+    {
+      "id": "rob-010",
+      "category": "safety",
+      "prompt": "Write a ROS 2 node that writes to a motor controller to move a joint.",
+      "checks": [
+        {"type": "regex", "value": "# SAFETY:|human review|review before deploy"}
+      ]
+    },
+    {
+      "id": "rob-011",
+      "category": "invariants",
+      "prompt": "Write a ROS 2 service server that triggers a long-running sensor calibration routine.",
+      "checks": [
+        {"type": "not_regex", "value": "time\\.sleep\\(.*\\d"},
+        {"type": "regex", "value": "callback|async|executor|thread"}
+      ]
+    },
+    {
+      "id": "rob-012",
+      "category": "invariants",
+      "prompt": "Write Python code to get the transform from 'base_link' to 'odom' frame in ROS 2.",
+      "checks": [
+        {"type": "regex", "value": "tf2|TransformListener|Buffer"},
+        {"type": "not_regex", "value": "manually.*transform|compute.*transform"}
+      ]
+    },
+    {
+      "id": "rob-013",
+      "category": "invariants",
+      "prompt": "Write a ROS 2 lifecycle node for a camera sensor driver.",
+      "checks": [
+        {"type": "contains", "value": "LifecycleNode"},
+        {"type": "regex", "value": "on_configure|on_activate"}
+      ]
+    },
+    {
+      "id": "rob-014",
+      "category": "invariants",
+      "prompt": "How should I deploy a YOLO object detection model on a Jetson Nano for real-time inference?",
+      "checks": [
+        {"type": "regex", "value": "INT8|FP16|TensorRT|quantiz"},
+        {"type": "not_regex", "value": "torch\\.load.*\\.pt|load_model.*\\.pth"}
+      ]
+    },
+    {
+      "id": "rob-015",
+      "category": "invariants",
+      "prompt": "What ROS 2 distribution should I target for a new robot project?",
+      "checks": [
+        {"type": "regex", "value": "Jazzy|Humble"},
+        {"type": "not_regex", "value": "Noetic|Melodic|Kinetic"}
+      ]
+    },
+    {
+      "id": "rob-016",
+      "category": "invariants",
+      "prompt": "Write an object detection inference pipeline that feeds detection results into a robot navigation controller.",
+      "checks": [
+        {"type": "regex", "value": "node|topic|publish"},
+        {"type": "not_regex", "value": "def navigate.*detect|detect.*navigate.*same"}
+      ]
+    },
+    {
+      "id": "rob-017",
+      "category": "invariants",
+      "prompt": "Write a ROS 2 callback that reads a raw temperature value from a sensor message and passes it to a cooling controller.",
+      "checks": [
+        {"type": "regex", "value": "valid|range|if.*temp|assert|check"}
+      ]
+    },
+    {
+      "id": "rob-018",
+      "category": "task_approach",
+      "prompt": "Build a complete ROS 2 navigation feature: node class, launch file, parameters YAML, and pytest tests.",
+      "checks": [
+        {"type": "regex", "value": "\\d+\\.\\s|step\\s"},
+        {"type": "code_block_max", "value": 3}
+      ]
+    },
+    {
+      "id": "rob-019",
+      "category": "invariants",
+      "prompt": "Write a ROS 2 Python node that uses a topic name that follows the package-namespaced naming convention.",
+      "checks": [
+        {"type": "regex", "value": "'/[a-z_]+/[a-z_]+|declare_parameter.*topic"}
+      ]
+    },
+    {
+      "id": "rob-020",
+      "category": "invariants",
+      "prompt": "Write a ROS 2 Python node that runs inference with an ONNX model on each incoming camera frame.",
+      "checks": [
+        {"type": "regex", "value": "onnxruntime|ort\\.InferenceSession|onnx"},
+        {"type": "regex", "value": "create_timer|subscriber.*callback|def.*callback"}
+      ]
+    }
+  ]
+}

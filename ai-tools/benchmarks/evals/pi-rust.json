@@ -1,0 +1,190 @@
+{
+  "package": "pi-rust",
+  "description": "20 questions covering output format, invariants, safety, and task approach for the pi-rust skill.",
+  "questions": [
+    {
+      "id": "rs-001",
+      "category": "output_format",
+      "prompt": "Write a Rust function format_currency(amount: f64) -> String that formats a float as USD, e.g. $1,234.56.",
+      "checks": [
+        {"type": "has_code_block"},
+        {"type": "contains", "value": "// <AI-Generated START>"},
+        {"type": "contains", "value": "// <AI-Generated END>"}
+      ]
+    },
+    {
+      "id": "rs-002",
+      "category": "test_first",
+      "prompt": "Implement a Rust function calculate_order_total(items: &[OrderItem], tax_rate: f64) -> f64.",
+      "checks": [
+        {"type": "first_code_block_contains", "value": "#[test]"},
+        {"type": "contains", "value": "mod tests {"}
+      ]
+    },
+    {
+      "id": "rs-003",
+      "category": "invariants",
+      "prompt": "Write a Rust function that reads a JSON config file and returns its parsed contents.",
+      "checks": [
+        {"type": "not_regex", "value": "\\.unwrap\\(\\)"},
+        {"type": "contains", "value": "Result<"}
+      ]
+    },
+    {
+      "id": "rs-004",
+      "category": "invariants",
+      "prompt": "Write an unsafe Rust function that takes a raw C string pointer and converts it to a Rust &str.",
+      "checks": [
+        {"type": "contains", "value": "// SAFETY:"},
+        {"type": "contains", "value": "unsafe"}
+      ]
+    },
+    {
+      "id": "rs-005",
+      "category": "invariants",
+      "prompt": "Define a Rust error type for a library that handles file I/O and JSON parse errors.",
+      "checks": [
+        {"type": "contains", "value": "thiserror"},
+        {"type": "contains", "value": "#[derive"}
+      ]
+    },
+    {
+      "id": "rs-006",
+      "category": "invariants",
+      "prompt": "Write a Rust CLI binary main() function that reads a config file and processes it.",
+      "checks": [
+        {"type": "regex", "value": "anyhow|Result<\\(\\)>|Result<.*Error>"},
+        {"type": "contains", "value": "fn main()"}
+      ]
+    },
+    {
+      "id": "rs-007",
+      "category": "invariants",
+      "prompt": "Write a Rust struct WebServer that holds a database connection shared across request handlers and is testable in isolation.",
+      "checks": [
+        {"type": "contains", "value": "Arc<dyn"},
+        {"type": "contains", "value": "trait"}
+      ]
+    },
+    {
+      "id": "rs-008",
+      "category": "invariants",
+      "prompt": "Write an async Rust function that fetches JSON from an HTTP endpoint.",
+      "checks": [
+        {"type": "contains", "value": "async fn"},
+        {"type": "regex", "value": "tokio|reqwest"},
+        {"type": "not_contains", "value": "thread::spawn"}
+      ]
+    },
+    {
+      "id": "rs-009",
+      "category": "invariants",
+      "prompt": "Create a Cargo.toml for a new Rust library crate named pi-core.",
+      "checks": [
+        {"type": "contains", "value": "edition = \"2021\""},
+        {"type": "contains", "value": "[package]"}
+      ]
+    },
+    {
+      "id": "rs-010",
+      "category": "invariants",
+      "prompt": "What must I run before committing Rust code to ensure code quality?",
+      "checks": [
+        {"type": "contains", "value": "clippy"},
+        {"type": "contains", "value": "fmt"}
+      ]
+    },
+    {
+      "id": "rs-011",
+      "category": "test_first",
+      "prompt": "Implement a Rust function validate_email(email: &str) -> Result<(), ValidationError>.",
+      "checks": [
+        {"type": "first_code_block_contains", "value": "#[test]"},
+        {"type": "contains", "value": "mod tests {"}
+      ]
+    },
+    {
+      "id": "rs-012",
+      "category": "invariants",
+      "prompt": "Write a Rust function that opens a file, reads its contents, and parses it as JSON.",
+      "checks": [
+        {"type": "contains", "value": "?"},
+        {"type": "not_regex", "value": "\\.unwrap\\(\\)"},
+        {"type": "contains", "value": "Result<"}
+      ]
+    },
+    {
+      "id": "rs-013",
+      "category": "task_approach",
+      "prompt": "Build a complete Axum feature: router, handler, request/response types, service trait, and integration test.",
+      "checks": [
+        {"type": "regex", "value": "\\d+\\.\\s|step\\s"},
+        {"type": "code_block_max", "value": 3}
+      ]
+    },
+    {
+      "id": "rs-014",
+      "category": "invariants",
+      "prompt": "Write a public Rust trait DataRepository for fetching and storing domain entities.",
+      "checks": [
+        {"type": "contains", "value": "///"}
+      ]
+    },
+    {
+      "id": "rs-015",
+      "category": "invariants",
+      "prompt": "Write a Rust library function that parses a comma-separated list of integers from a &str.",
+      "checks": [
+        {"type": "not_regex", "value": "\\.unwrap\\(\\)"},
+        {"type": "regex", "value": "Result<|Option<"}
+      ]
+    },
+    {
+      "id": "rs-016",
+      "category": "invariants",
+      "prompt": "Write Rust code that creates a slice from a raw pointer and a known length.",
+      "checks": [
+        {"type": "contains", "value": "// SAFETY:"},
+        {"type": "contains", "value": "unsafe"}
+      ]
+    },
+    {
+      "id": "rs-017",
+      "category": "invariants",
+      "prompt": "Write Rust code that sends 100 HTTP requests concurrently.",
+      "checks": [
+        {"type": "contains", "value": "tokio"},
+        {"type": "contains", "value": "async"},
+        {"type": "not_contains", "value": "thread::spawn"}
+      ]
+    },
+    {
+      "id": "rs-018",
+      "category": "invariants",
+      "prompt": "Should I use thiserror or anyhow for error types in a Rust library crate?",
+      "checks": [
+        {"type": "contains", "value": "thiserror"},
+        {"type": "regex", "value": "library|crate|anyhow.*application|anyhow.*binary"}
+      ]
+    },
+    {
+      "id": "rs-019",
+      "category": "invariants",
+      "prompt": "Write a Rust function that filters a Vec<User> by a predicate and returns only active users.",
+      "checks": [
+        {"type": "has_code_block"},
+        {"type": "contains", "value": "// <AI-Generated START>"}
+      ]
+    },
+    {
+      "id": "rs-020",
+      "category": "invariants",
+      "prompt": "Write a Rust function that checks whether a string is a valid UUID.",
+      "checks": [
+        {"type": "has_code_block"},
+        {"type": "not_regex", "value": "\\.unwrap\\(\\)"},
+        {"type": "contains", "value": "// <AI-Generated START>"}
+      ]
+    }
+  ]
+}

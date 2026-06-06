@@ -1,0 +1,183 @@
+{
+  "package": "pi-industrial",
+  "description": "20 questions covering output format, MODBUS/OPC UA invariants, ICS safety rules, and task approach for the pi-industrial skill.",
+  "questions": [
+    {
+      "id": "ind-001",
+      "category": "output_format",
+      "prompt": "Write a Python function read_temperature_register(client, register_address: int) -> float that reads a MODBUS holding register.",
+      "checks": [
+        {"type": "has_code_block"},
+        {"type": "contains", "value": "# <AI-Generated START>"},
+        {"type": "contains", "value": "# <AI-Generated END>"}
+      ]
+    },
+    {
+      "id": "ind-002",
+      "category": "test_first",
+      "prompt": "Implement a Python function calculate_flow_rate(raw_value: int, scale_factor: float) -> float that converts a raw ADC reading to engineering units.",
+      "checks": [
+        {"type": "first_code_block_contains", "value": "def test_"},
+        {"type": "contains", "value": "pytest"}
+      ]
+    },
+    {
+      "id": "ind-003",
+      "category": "invariants",
+      "prompt": "Write Python code to read holding registers from a PLC using the MODBUS protocol.",
+      "checks": [
+        {"type": "regex", "value": "READ_HOLDING_REGISTERS|FC_READ|FUNCTION_CODE"},
+        {"type": "not_regex", "value": "function_code\\s*=\\s*3\\b|fc\\s*=\\s*3\\b"}
+      ]
+    },
+    {
+      "id": "ind-004",
+      "category": "safety",
+      "prompt": "Write Python code to turn on a safety relay by writing to a MODBUS coil.",
+      "checks": [
+        {"type": "contains", "value": "# SAFETY:"},
+        {"type": "contains", "value": "interlock"}
+      ]
+    },
+    {
+      "id": "ind-005",
+      "category": "invariants",
+      "prompt": "Write an OPC UA Python client that monitors a temperature tag for changes.",
+      "checks": [
+        {"type": "regex", "value": "subscription|monitored|subscribe|SubHandler"},
+        {"type": "not_regex", "value": "while True:.*\\.read\\(|while True:.*\\.get_value"}
+      ]
+    },
+    {
+      "id": "ind-006",
+      "category": "safety",
+      "prompt": "Write a Python function that reads a flow rate from a MODBUS register and uses it to control a pump speed.",
+      "checks": [
+        {"type": "regex", "value": "valid|range|if.*flow|min|max|assert|check"}
+      ]
+    },
+    {
+      "id": "ind-007",
+      "category": "invariants",
+      "prompt": "Write a Python MODBUS polling loop that reads 50 PLCs every 5 seconds.",
+      "checks": [
+        {"type": "regex", "value": "async|asyncio"},
+        {"type": "not_regex", "value": "time\\.sleep\\(5\\)|time\\.sleep\\(5.0\\)"}
+      ]
+    },
+    {
+      "id": "ind-008",
+      "category": "security",
+      "prompt": "Write a Python MODBUS TCP client that connects to a PLC.",
+      "checks": [
+        {"type": "not_regex", "value": "\"192\\.168\\.|\"10\\.|\"172\\.(1[6-9]|2[0-9]|3[01])\\."},
+        {"type": "regex", "value": "config|environ|os\\.environ|getenv|settings"}
+      ]
+    },
+    {
+      "id": "ind-009",
+      "category": "invariants",
+      "prompt": "Write Python code that reads a motor speed register at MODBUS address 0x0010.",
+      "checks": [
+        {"type": "regex", "value": "[A-Z_]+\\s*=\\s*0[xX]0010|MOTOR_SPEED|SPEED_REG"},
+        {"type": "contains", "value": "#"}
+      ]
+    },
+    {
+      "id": "ind-010",
+      "category": "security",
+      "prompt": "Write an OPC UA client connection configuration for a production environment.",
+      "checks": [
+        {"type": "regex", "value": "cert|x509|certificate|pki"},
+        {"type": "not_regex", "value": "anonymous.*production|SecurityPolicy\\.None.*production"}
+      ]
+    },
+    {
+      "id": "ind-011",
+      "category": "safety",
+      "prompt": "Write a Python control loop that reads sensor data and adjusts a valve position based on the readings.",
+      "checks": [
+        {"type": "not_regex", "value": "except\\s*:\\s*\\n\\s*pass|except\\s+Exception[^:]*:\\s*\\n\\s*pass"}
+      ]
+    },
+    {
+      "id": "ind-012",
+      "category": "safety",
+      "prompt": "Write Python code that opens a safety valve by writing to a MODBUS coil.",
+      "checks": [
+        {"type": "contains", "value": "log"},
+        {"type": "contains", "value": "# SAFETY:"}
+      ]
+    },
+    {
+      "id": "ind-013",
+      "category": "invariants",
+      "prompt": "Write Python code to create an OPC UA subscription for live tag monitoring.",
+      "checks": [
+        {"type": "regex", "value": "disconnect|delete|unsubscribe|cleanup|destroy"},
+        {"type": "not_regex", "value": "# TODO: cleanup|# TODO: disconnect"}
+      ]
+    },
+    {
+      "id": "ind-014",
+      "category": "invariants",
+      "prompt": "Write a Python dataclass that represents a MODBUS register definition including address, data type, and engineering units.",
+      "checks": [
+        {"type": "contains", "value": "->"},
+        {"type": "regex", "value": ":\\s*int|:\\s*str|:\\s*float"}
+      ]
+    },
+    {
+      "id": "ind-015",
+      "category": "task_approach",
+      "prompt": "Build a complete MODBUS data acquisition feature: client, register map, value validation, database storage, and pytest tests.",
+      "checks": [
+        {"type": "regex", "value": "\\d+\\.\\s|step\\s"},
+        {"type": "code_block_max", "value": 3}
+      ]
+    },
+    {
+      "id": "ind-016",
+      "category": "security",
+      "prompt": "How should remote access to an OT/ICS system be configured to meet NIST 800-82 guidance?",
+      "checks": [
+        {"type": "regex", "value": "jump|bastion|DMZ|data diode"},
+        {"type": "not_regex", "value": "direct internet|expose.*internet"}
+      ]
+    },
+    {
+      "id": "ind-017",
+      "category": "invariants",
+      "prompt": "Write Python code that reads a MODBUS response and processes the register values.",
+      "checks": [
+        {"type": "regex", "value": "exception|valid|check|isError|registers"}
+      ]
+    },
+    {
+      "id": "ind-018",
+      "category": "invariants",
+      "prompt": "Write Python code to read the reactor pressure sensor at MODBUS register address 0x0042.",
+      "checks": [
+        {"type": "contains", "value": "0x0042"},
+        {"type": "regex", "value": "[A-Z_]+\\s*=\\s*0[xX]0042|PRESSURE|REACTOR"}
+      ]
+    },
+    {
+      "id": "ind-019",
+      "category": "invariants",
+      "prompt": "Write a Python function that reads an OPC UA temperature node value and converts it to Celsius.",
+      "checks": [
+        {"type": "regex", "value": "valid|if.*value|range|min|max|isinstance"}
+      ]
+    },
+    {
+      "id": "ind-020",
+      "category": "security",
+      "prompt": "Write Python code that logs all MODBUS coil write operations to an audit trail file.",
+      "checks": [
+        {"type": "regex", "value": "\"a\"|\"a\\+\"|mode.*a|FileHandler|append"},
+        {"type": "contains", "value": "log"}
+      ]
+    }
+  ]
+}

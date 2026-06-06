@@ -1,0 +1,185 @@
+{
+  "package": "pi-python",
+  "description": "20 questions covering output format, invariants, security, and task approach for the pi-python skill.",
+  "questions": [
+    {
+      "id": "py-001",
+      "category": "output_format",
+      "prompt": "Write a utility function format_currency(amount: float) -> str that formats a float as USD, e.g. $1,234.56.",
+      "checks": [
+        {"type": "has_code_block"},
+        {"type": "contains", "value": "# <AI-Generated START>"},
+        {"type": "contains", "value": "# <AI-Generated END>"}
+      ]
+    },
+    {
+      "id": "py-002",
+      "category": "test_first",
+      "prompt": "Implement a function calculate_order_total(items: list, tax_rate: float) -> Decimal that sums item prices and applies a tax rate.",
+      "checks": [
+        {"type": "first_code_block_contains", "value": "def test_"},
+        {"type": "contains", "value": "pytest"}
+      ]
+    },
+    {
+      "id": "py-003",
+      "category": "invariants",
+      "prompt": "Write a function that reads all files ending in .log from a given directory path and returns their combined text content.",
+      "checks": [
+        {"type": "contains", "value": "pathlib"},
+        {"type": "not_regex", "value": "os\\.path\\.join|os\\.listdir"}
+      ]
+    },
+    {
+      "id": "py-004",
+      "category": "invariants",
+      "prompt": "Write a FastAPI route handler GET /users/{user_id} that loads a user record from PostgreSQL using SQLAlchemy.",
+      "checks": [
+        {"type": "contains", "value": "async def"},
+        {"type": "contains", "value": "AsyncSession"}
+      ]
+    },
+    {
+      "id": "py-005",
+      "category": "security",
+      "prompt": "Write SQLAlchemy code to search for users whose name contains a substring provided by the caller.",
+      "checks": [
+        {"type": "not_regex", "value": "f[\"'].*(?:SELECT|WHERE).*\\{"},
+        {"type": "not_regex", "value": "\"SELECT.*\"\\s*%\\s"},
+        {"type": "not_regex", "value": "'SELECT.*'\\s*%\\s"}
+      ]
+    },
+    {
+      "id": "py-006",
+      "category": "invariants",
+      "prompt": "Define a Pydantic model UserCreate with email: str, username: str, and password: str fields.",
+      "checks": [
+        {"type": "contains", "value": "BaseModel"},
+        {"type": "not_contains", "value": "@validator"}
+      ]
+    },
+    {
+      "id": "py-007",
+      "category": "invariants",
+      "prompt": "Write async Python code that POSTs order data to an external fulfillment API at a configurable URL.",
+      "checks": [
+        {"type": "contains", "value": "async with"},
+        {"type": "not_regex", "value": "requests\\.(get|post|put|patch)"}
+      ]
+    },
+    {
+      "id": "py-008",
+      "category": "invariants",
+      "prompt": "Add JWT authentication to a FastAPI route using dependency injection.",
+      "checks": [
+        {"type": "contains", "value": "Depends("},
+        {"type": "contains", "value": "async def"}
+      ]
+    },
+    {
+      "id": "py-009",
+      "category": "invariants",
+      "prompt": "I need to generate thumbnails for 50,000 images as fast as possible. Write the Python processing code.",
+      "checks": [
+        {"type": "contains", "value": "ProcessPoolExecutor"}
+      ]
+    },
+    {
+      "id": "py-010",
+      "category": "invariants",
+      "prompt": "Write a FastAPI POST /products endpoint. Include Pydantic request and response models.",
+      "checks": [
+        {"type": "contains", "value": "response_model="},
+        {"type": "contains", "value": "BaseModel"}
+      ]
+    },
+    {
+      "id": "py-011",
+      "category": "invariants",
+      "prompt": "Write an async SQLAlchemy query to fetch all users where is_active is True.",
+      "checks": [
+        {"type": "contains", "value": "AsyncSession"},
+        {"type": "contains", "value": "select("},
+        {"type": "not_contains", "value": ".query("}
+      ]
+    },
+    {
+      "id": "py-012",
+      "category": "invariants",
+      "prompt": "What is the correct Alembic migration name for a migration that adds an index on the users.email column?",
+      "checks": [
+        {"type": "not_regex", "value": "migration_?0*1[^0-9]|revision_?0*1[^0-9]"},
+        {"type": "regex", "value": "email.*index|index.*email|add.*email"}
+      ]
+    },
+    {
+      "id": "py-013",
+      "category": "task_approach",
+      "prompt": "Build a complete user registration feature: FastAPI endpoint, Pydantic request/response models, SQLAlchemy model, and a service class.",
+      "checks": [
+        {"type": "regex", "value": "\\d+\\.\\s|step\\s"},
+        {"type": "code_block_max", "value": 3}
+      ]
+    },
+    {
+      "id": "py-014",
+      "category": "invariants",
+      "prompt": "Write an async SQLAlchemy query to get all users using the legacy session.query() API.",
+      "checks": [
+        {"type": "contains", "value": "select("},
+        {"type": "not_contains", "value": "session.query("}
+      ]
+    },
+    {
+      "id": "py-015",
+      "category": "security",
+      "prompt": "Write a FastAPI application that loads its DATABASE_URL at startup.",
+      "checks": [
+        {"type": "regex", "value": "BaseSettings|os\\.environ"},
+        {"type": "not_regex", "value": "\"postgresql://.*:.*@"}
+      ]
+    },
+    {
+      "id": "py-016",
+      "category": "invariants",
+      "prompt": "Write a function parse_user_record(data: dict) that extracts name and email fields.",
+      "checks": [
+        {"type": "regex", "value": "def parse_user_record\\(.*:.*\\).*->"}
+      ]
+    },
+    {
+      "id": "py-017",
+      "category": "invariants",
+      "prompt": "Write Python code to make an HTTP request to an external API and return the JSON response.",
+      "checks": [
+        {"type": "not_regex", "value": "requests\\.(get|post)"},
+        {"type": "contains", "value": "async"}
+      ]
+    },
+    {
+      "id": "py-018",
+      "category": "invariants",
+      "prompt": "Write Python code to open a log file, append a timestamped entry, and close it safely.",
+      "checks": [
+        {"type": "contains", "value": "with open("}
+      ]
+    },
+    {
+      "id": "py-019",
+      "category": "invariants",
+      "prompt": "Write a public Python function compound_interest(principal: float, rate: float, periods: int) -> float.",
+      "checks": [
+        {"type": "contains", "value": "\"\"\""}
+      ]
+    },
+    {
+      "id": "py-020",
+      "category": "invariants",
+      "prompt": "How should I declare a new third-party Python dependency (e.g. httpx) for my project?",
+      "checks": [
+        {"type": "contains", "value": "pyproject.toml"},
+        {"type": "not_contains", "value": "setup.py"}
+      ]
+    }
+  ]
+}

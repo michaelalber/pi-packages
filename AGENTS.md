@@ -128,7 +128,7 @@ These are the minimal rules every project-type harness inherits:
 - [x] Phase 2 core packages — all five packages implemented (`pi-dotnet`, `pi-python`, `pi-php`, `pi-robotics`, `pi-industrial`); `pi-rust` added as sixth package
 - [x] Modelfiles — all six written with temperature 0.15, num_ctx, and full system prompts; behavior rules migrated to skill files as authoritative source
 - [ ] MLX-LM: `mlx_lm.server` serves one model at a time — no multi-model routing equivalent to Ollama; router extension always uses the currently-running model on port 8080
-- [ ] Phase 4 benchmarks — `ai-tools/benchmarks/eval_runner.py` and 20-question eval sets per project type not yet written
+- [x] Phase 4 benchmarks — `ai-tools/benchmarks/eval_runner.py`, 20-question eval sets per project type, and unit tests written; run with `uvx pytest` (tests) and `python3 ai-tools/benchmarks/eval_runner.py --package <name>` (live Ollama run)
 - [ ] npm publish workflow — `scripts/prepublish.js` exists but packages have not been published; needs scoped npm account `@malber`
 
 ---

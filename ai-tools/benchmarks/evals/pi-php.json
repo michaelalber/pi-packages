@@ -1,0 +1,187 @@
+{
+  "package": "pi-php",
+  "description": "20 questions covering output format, invariants, security, and task approach for the pi-php skill.",
+  "questions": [
+    {
+      "id": "php-001",
+      "category": "output_format",
+      "prompt": "Write a PHP helper function format_currency(float $amount): string that formats a float as USD, e.g. $1,234.56.",
+      "checks": [
+        {"type": "has_code_block"},
+        {"type": "contains", "value": "// <AI-Generated START>"},
+        {"type": "contains", "value": "// <AI-Generated END>"}
+      ]
+    },
+    {
+      "id": "php-002",
+      "category": "test_first",
+      "prompt": "Add a UserService method calculateOrderTotal(array $items, float $taxRate): float.",
+      "checks": [
+        {"type": "first_code_block_contains", "value": "public function test"},
+        {"type": "regex", "value": "[Pp]est|[Pp]HP[Uu]nit|test"}
+      ]
+    },
+    {
+      "id": "php-003",
+      "category": "invariants",
+      "prompt": "Write a PHP service class UserService with a method findByEmail(string $email): ?User.",
+      "checks": [
+        {"type": "contains", "value": "declare(strict_types=1)"},
+        {"type": "regex", "value": ":\\s*\\?User|:\\s*User"}
+      ]
+    },
+    {
+      "id": "php-004",
+      "category": "invariants",
+      "prompt": "Write a Laravel controller method to create a new product from a POST request.",
+      "checks": [
+        {"type": "regex", "value": "[Ss]tore[A-Z]\\w*Request|FormRequest|->validate\\("},
+        {"type": "not_contains", "value": "$request->input("}
+      ]
+    },
+    {
+      "id": "php-005",
+      "category": "security",
+      "prompt": "Write PHP code to find database records whose name column matches a search term provided by the user.",
+      "checks": [
+        {"type": "not_regex", "value": "\\$_[A-Z]+|DB::statement.*\\$|\"SELECT.*\"\\s*\\.\\s*\\$"},
+        {"type": "regex", "value": "->where\\(|->like\\(|->search\\("}
+      ]
+    },
+    {
+      "id": "php-006",
+      "category": "invariants",
+      "prompt": "How should a Laravel application access the DATABASE_URL value at runtime in application code?",
+      "checks": [
+        {"type": "contains", "value": "config("},
+        {"type": "not_regex", "value": "env\\(['\"]DATABASE"}
+      ]
+    },
+    {
+      "id": "php-007",
+      "category": "security",
+      "prompt": "Where should I store my Stripe API key in a Laravel application?",
+      "checks": [
+        {"type": "contains", "value": ".env"},
+        {"type": "not_regex", "value": "hardcode|in the controller|in your class"}
+      ]
+    },
+    {
+      "id": "php-008",
+      "category": "invariants",
+      "prompt": "Write Eloquent code to load all orders for a user, including their order items.",
+      "checks": [
+        {"type": "contains", "value": "with("},
+        {"type": "not_regex", "value": "->each\\(function.*->items"}
+      ]
+    },
+    {
+      "id": "php-009",
+      "category": "invariants",
+      "prompt": "Write a Laravel service class PaymentService that depends on a PaymentRepository.",
+      "checks": [
+        {"type": "contains", "value": "__construct"},
+        {"type": "not_regex", "value": "new PaymentRepository\\(\\)"}
+      ]
+    },
+    {
+      "id": "php-010",
+      "category": "invariants",
+      "prompt": "What should I name a Laravel migration that adds an email index to the users table?",
+      "checks": [
+        {"type": "not_regex", "value": "migration_?0*1[^0-9]"},
+        {"type": "regex", "value": "add.*email.*index|add.*index.*email"}
+      ]
+    },
+    {
+      "id": "php-011",
+      "category": "invariants",
+      "prompt": "Write a Vue.js component that displays a list of products fetched from an API.",
+      "checks": [
+        {"type": "regex", "value": "<script setup|script setup"},
+        {"type": "not_regex", "value": "data\\(\\)\\s*\\{|export default\\s*\\{[^}]*data\\(\\)"}
+      ]
+    },
+    {
+      "id": "php-012",
+      "category": "task_approach",
+      "prompt": "Build a complete product creation feature: Laravel controller, Form Request, Eloquent model, service class, and Pest test.",
+      "checks": [
+        {"type": "regex", "value": "\\d+\\.\\s|step\\s"},
+        {"type": "code_block_max", "value": 3}
+      ]
+    },
+    {
+      "id": "php-013",
+      "category": "security",
+      "prompt": "Write a Laravel route handler that accepts file uploads from users.",
+      "checks": [
+        {"type": "regex", "value": "->validate\\(|FormRequest|StoreFile\\w*Request"},
+        {"type": "not_regex", "value": "move_uploaded_file.*\\$_FILES"}
+      ]
+    },
+    {
+      "id": "php-014",
+      "category": "invariants",
+      "prompt": "Write code to display all blog posts with their author and comments on a page.",
+      "checks": [
+        {"type": "contains", "value": "with("},
+        {"type": "not_regex", "value": "->each\\(function.*->comments"}
+      ]
+    },
+    {
+      "id": "php-015",
+      "category": "invariants",
+      "prompt": "Write a PHP function getActiveUsersCount(): int.",
+      "checks": [
+        {"type": "contains", "value": ": int"},
+        {"type": "contains", "value": "declare(strict_types=1)"}
+      ]
+    },
+    {
+      "id": "php-016",
+      "category": "invariants",
+      "prompt": "Write a Laravel service class that sends email using a configurable SMTP host.",
+      "checks": [
+        {"type": "not_regex", "value": "env\\(['\"]SMTP"},
+        {"type": "contains", "value": "config("}
+      ]
+    },
+    {
+      "id": "php-017",
+      "category": "test_first",
+      "prompt": "Add a method to calculate shipping cost based on weight (float) and destination (string).",
+      "checks": [
+        {"type": "regex", "value": "it\\(|test\\(|public function test|\\[Test\\]"},
+        {"type": "regex", "value": "expect\\(|assertEquals|assertSame"}
+      ]
+    },
+    {
+      "id": "php-018",
+      "category": "invariants",
+      "prompt": "Write a PHP function that parses a date string and returns a Carbon instance.",
+      "checks": [
+        {"type": "regex", "value": "\\):\\s*(\\\\?Carbon|Carbon)"},
+        {"type": "contains", "value": "string $"}
+      ]
+    },
+    {
+      "id": "php-019",
+      "category": "invariants",
+      "prompt": "Write a Vue.js ProductCard component that accepts name (string), price (number), and inStock (boolean) as props.",
+      "checks": [
+        {"type": "regex", "value": "defineProps<|interface.*Props|withDefaults"}
+      ]
+    },
+    {
+      "id": "php-020",
+      "category": "invariants",
+      "prompt": "Write a PHP interface PaymentGatewayInterface with methods for charging and refunding.",
+      "checks": [
+        {"type": "contains", "value": "interface PaymentGatewayInterface"},
+        {"type": "contains", "value": "declare(strict_types=1)"},
+        {"type": "has_code_block"}
+      ]
+    }
+  ]
+}
