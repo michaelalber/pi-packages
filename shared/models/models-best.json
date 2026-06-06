@@ -6,7 +6,7 @@
       "provider": "ollama",
       "baseUrl": "http://localhost:11434",
       "model": "qwen2.5-coder:7b",
-      "notes": "Best quality 7B coder — replaces granite-code:8b on Laptop"
+      "notes": "Best quality 7B coder — primary + fast fallback on Laptop"
     },
     {
       "id": "laptop/phi3.5:3.8b",
@@ -20,58 +20,86 @@
       "provider": "ollama",
       "baseUrl": "http://localhost:11434",
       "model": "qwen2.5-coder:14b",
-      "notes": "Best quality that fits PC in Q4 (~9 GB) — replaces phi4:14b"
+      "notes": "Primary PC model — fits fully in RTX 3080 10 GB VRAM; coding, local-rag LLM, second-brain Q&A"
     },
     {
-      "id": "pc/deepseek-coder-v2:16b",
+      "id": "pc/qwen2.5-coder:7b",
       "provider": "ollama",
       "baseUrl": "http://localhost:11434",
-      "model": "deepseek-coder-v2:16b",
-      "notes": "Strong math + algorithms; tight on RTX 3080"
+      "model": "qwen2.5-coder:7b",
+      "notes": "Fast fallback on PC — full GPU, quick inline tasks"
     },
     {
-      "id": "mac-mini/qwen2.5-coder:32b",
+      "id": "pc/devstral:24b",
+      "provider": "ollama",
+      "baseUrl": "http://localhost:11434",
+      "model": "devstral:24b",
+      "notes": "Primary agentic coder — pi-packages, multi-file edits, 256K context; partial VRAM offload on RTX 3080"
+    },
+    {
+      "id": "pc/qwen3-coder:30b",
+      "provider": "ollama",
+      "baseUrl": "http://localhost:11434",
+      "model": "qwen3-coder:30b",
+      "notes": "MoE (3.3B active / 30B total) — long-context RAG and agentic loops; 256K context; inference speed ~7B despite total size"
+    },
+    {
+      "id": "pc/JetBrains/Mellum-4b-sft-all",
+      "provider": "ollama",
+      "baseUrl": "http://localhost:11434",
+      "model": "JetBrains/Mellum-4b-sft-all:latest",
+      "notes": "JetBrains AI Assistant inline completions — all languages; fits fully in VRAM"
+    },
+    {
+      "id": "mac-mini/qwen3-coder:30b",
       "provider": "ollama",
       "baseUrl": "http://mac-mini:11434",
-      "model": "qwen2.5-coder:32b",
-      "notes": "#1 on coding benchmarks — primary Mac Mini model"
+      "model": "qwen3-coder:30b",
+      "notes": "Primary Mac Mini coding agent — MoE 256K context; fast on Apple Silicon unified memory"
+    },
+    {
+      "id": "mac-mini/devstral:24b",
+      "provider": "ollama",
+      "baseUrl": "http://mac-mini:11434",
+      "model": "devstral:24b",
+      "notes": "Agentic fallback on Mac Mini — 68% SWE-bench, 256K context"
     },
     {
       "id": "mac-mini/llama3.3:70b",
       "provider": "ollama",
       "baseUrl": "http://mac-mini:11434",
       "model": "llama3.3:70b",
-      "notes": "Deep reasoning and architecture review"
-    },
-    {
-      "id": "mac-mini/codestral:22b",
-      "provider": "ollama",
-      "baseUrl": "http://mac-mini:11434",
-      "model": "codestral:22b",
-      "notes": "Strong EU coding model — fallback / PHP/Python tasks"
+      "notes": "Deep reasoning and architecture review — second-brain summarization"
     },
     {
       "id": "mac-mini/command-r:35b",
       "provider": "ollama",
       "baseUrl": "http://mac-mini:11434",
       "model": "command-r:35b",
-      "notes": "RAG-heavy tasks, 128K context"
+      "notes": "RAG-heavy tasks, 128K context — local-rag and second-brain"
     }
   ],
   "embeddings": [
     {
-      "id": "mac-mini/mxbai-embed-large",
-      "provider": "ollama",
-      "baseUrl": "http://mac-mini:11434",
-      "model": "mxbai-embed-large",
-      "notes": "Best quality embeddings — Mac Mini only"
-    },
-    {
-      "id": "nomic-embed-text",
+      "id": "pc/snowflake-arctic-embed2",
       "provider": "ollama",
       "baseUrl": "http://localhost:11434",
-      "model": "nomic-embed-text",
-      "notes": "PC and Laptop"
+      "model": "snowflake-arctic-embed2:latest",
+      "notes": "Best quality embeddings on PC — second-brain semantic search"
+    },
+    {
+      "id": "pc/mxbai-embed-large",
+      "provider": "ollama",
+      "baseUrl": "http://localhost:11434",
+      "model": "mxbai-embed-large:latest",
+      "notes": "local-rag configured embedding model"
+    },
+    {
+      "id": "pc/nomic-embed-text",
+      "provider": "ollama",
+      "baseUrl": "http://localhost:11434",
+      "model": "nomic-embed-text:latest",
+      "notes": "Fast embeddings — pi-packages; all machines"
     }
   ]
 }

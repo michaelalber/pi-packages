@@ -4,11 +4,13 @@
 #       This file is an Ollama convenience wrapper only.
 #       MLX-LM users: see shared/models/models-mac-mini-mlx.json
 #
-# List A base (US/EU): granite-code:34b — swap FROM line for List B:
-#   FROM qwen2.5-coder:32b   (Mac Mini — best overall)
-#   FROM phi4:14b             (PC — US origin)
+# PC default: qwen3-coder:30b — swap FROM line for other targets:
+#   FROM devstral:24b             (PC — alternative, 14 GB)
+#   FROM qwen2.5-coder:14b        (PC — lighter, fits 10 GB VRAM Q4)
+#   FROM granite-code:34b         (Mac Mini — List A US/EU)
+#   FROM qwen2.5-coder:32b        (Mac Mini — List B best overall)
 
-FROM granite-code:34b
+FROM qwen3-coder:30b
 
 PARAMETER temperature 0.15
 PARAMETER top_p 0.9

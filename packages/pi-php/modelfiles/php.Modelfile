@@ -4,12 +4,13 @@
 #       This file is an Ollama convenience wrapper only.
 #       MLX-LM users: see shared/models/models-mac-mini-mlx.json
 #
-# List A base (US/EU): codestral:22b — swap FROM line for alternatives:
-#   FROM phi4:14b             (PC — US origin, ~9 GB Q4)
-#   FROM granite-code:8b      (Laptop — US origin, fast)
-#   FROM qwen2.5-coder:32b    (Mac Mini List B — best overall)
+# PC default: qwen3-coder:30b — swap FROM line for other targets:
+#   FROM devstral:24b             (PC — alternative, 14 GB)
+#   FROM qwen2.5-coder:14b        (PC — lighter, fits 10 GB VRAM Q4)
+#   FROM codestral:22b            (Mac Mini — List A EU/US)
+#   FROM qwen2.5-coder:32b        (Mac Mini — List B best overall)
 
-FROM codestral:22b
+FROM qwen3-coder:30b
 
 PARAMETER temperature 0.15
 PARAMETER top_p 0.9
