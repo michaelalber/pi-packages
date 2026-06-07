@@ -11,13 +11,13 @@ import * as os from "os";
 import * as path from "path";
 
 interface RouterConfig {
-  medium?: string;   // model ID for 150–500 token messages (PC tier)
-  complex?: string;  // model ID for 500+ token messages (Mac Mini tier)
+  medium?: string;   // model ID for messages under 500 chars (default tier)
+  complex?: string;  // model ID for 500+ char messages (complex tier)
 }
 
 const THRESHOLDS = {
-  simple: 150,  // stay on current machine (fast local model)
-  medium: 500   // PC tier; above → Mac Mini tier
+  simple: 0,    // all messages route; no fast-path escape to boot model
+  medium: 500   // above → complex tier
 } as const;
 
 const DEFAULTS: Required<RouterConfig> = {
