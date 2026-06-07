@@ -1,3 +1,10 @@
+---
+name: robotics
+description: >
+  Robotics — ROS 2 (Python or C++), physical simulation (MuJoCo, Isaac Lab), VLA models,
+  edge AI inference, LeRobot, and Raspberry Pi / Jetson platforms.
+---
+
 # robotics
 
 Use this skill when working on Robotics — ROS 2 (Python or C++), physical simulation (MuJoCo, Isaac Lab), vision-language-action (VLA) models, edge AI inference, LeRobot, or Raspberry Pi / Jetson robot platforms.

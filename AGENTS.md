@@ -29,7 +29,7 @@
 - **Agent platform:** Pi (pi.dev) — terminal coding harness with Ollama provider, skill system, TypeScript extensions, and prompt templates
 - **Inference backend (Ollama):** GPU-accelerated local inference on Laptop (RTX 3060), PC (RTX 3080), and optionally Mac Mini; port 11434
 - **Inference backend (MLX-LM):** Apple Silicon-native inference via `mlx_lm.server` on Mac Mini (M4 Pro, 48 GB unified); port 8080, OpenAI-compatible API. Model IDs use `mlx-community/*` HuggingFace quantized variants. Serves one model at a time — restart to switch.
-- **RAG / grounding:** grounded-code-mcp (local MCP server) — injects authoritative docs into every model call via `search_knowledge` / `search_code_examples`
+- **RAG / grounding:** grounded-code-mcp CLI (subprocess via `spawnSync`) — injects authoritative docs into every model call via `search_knowledge` / `search_code_examples`; no MCP server process required
 - **Extension language:** TypeScript — all extensions compiled via `tsconfig.json` at repo root
 - **Package manager:** npm workspaces — root `package.json` manages all six sub-packages
 - **Distribution:** `pi install git:codeberg.org/malber/pi-packages/packages/pi-<type>` (dev) or `npm:@malber/pi-<type>` (post-publish)

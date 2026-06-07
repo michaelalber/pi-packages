@@ -41,14 +41,15 @@ function loadConfig(): Required<RouterConfig> {
 }
 
 export default function(pi: ExtensionAPI) {
-  pi.on("session_start", async (_event, ctx) => {
-    const len = ctx.message?.length ?? 0;
+  pi.on("input", async (event, ctx) => {
+    const text = (event as { text?: string }).text ?? "";
+    const len = text.length;
     if (len < THRESHOLDS.simple) return;
 
     const models = loadConfig();
     const target = len < THRESHOLDS.medium ? models.medium : models.complex;
-    await ctx.setModel(target);
-    ctx.notify(`Routed to ${target} (message length: ${len})`);
+    await pi.setModel(target);
+    ctx.ui.notify(`Routed to ${target} (message length: ${len})`);
   });
 }
 // <AI-Generated END>

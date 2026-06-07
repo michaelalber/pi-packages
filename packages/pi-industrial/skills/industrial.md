@@ -1,3 +1,10 @@
+---
+name: industrial
+description: >
+  Industrial automation, SCADA/HMI, PLC programming (IEC 61131-3), MODBUS, OPC UA,
+  industrial Python/Rust, and ICS security. Use when working on automation or control systems.
+---
+
 # industrial
 
 Use this skill when working on Industrial Automation, SCADA/HMI, PLC programming (IEC 61131-3), MODBUS, OPC UA, industrial Python/Rust, or ICS security.

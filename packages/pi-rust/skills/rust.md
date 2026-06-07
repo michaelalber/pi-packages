@@ -1,3 +1,10 @@
+---
+name: rust
+description: >
+  Rust systems programming, embedded (embassy, rp-hal), CLI tools, Axum web services,
+  and Rust robotics (rclrs). Use when working on any Rust project.
+---
+
 # rust
 
 Use this skill when working on Rust — systems programming, embedded (embassy, rp-hal), CLI tools, Axum web services, or Rust robotics (rclrs).
