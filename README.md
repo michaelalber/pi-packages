@@ -41,7 +41,7 @@ Each package is composed of four parts that work together:
 
 **Skill** (`skills/<type>.md`) — a precision instruction file under 500 tokens that defines the invariants, output format, and grounded-code collection map for the domain. The token budget is a hard constraint: local models degrade on long system prompts, so every word earns its place.
 
-**Prompt templates** (`prompts/`) — five structured templates (fix / review / generate / explain / decompose) that constrain the model's response shape. Structured output matters more with local models than with cloud models because local inference has less error correction.
+**Prompt templates** (`prompts/`) — eight structured templates (fix / review / generate / explain / decompose / red / green / refactor) that constrain the model's response shape. The three TDD phase templates lock each stage of Red→Green→Refactor so the model cannot conflate phases — invoke them explicitly as `/red`, `/green`, `/refactor`. Structured output matters more with local models than with cloud models because local inference has less error correction.
 
 **TypeScript extensions** (`extensions/`) — four shared extensions wired into every package via symlinks:
 - `rag.ts` — calls `grounded-code-mcp` CLI via subprocess (`--json` output) to inject vetted documentation before each response; registers `search_knowledge` and `search_code_examples` tools that the model invokes before generating code
@@ -267,6 +267,9 @@ Verify: `pi skills` — installed skill names should appear in the list.
 /generate     Generate new code from a description
 /explain      Explain what this code does and why
 /decompose    Break a multi-file task into atomic steps before starting
+/red          Write ONE failing test (Red phase — no production code)
+/green        Write minimum code to make the failing test pass
+/refactor     Improve structure without changing behavior (all tests must stay green)
 ```
 
 ### Switch models
@@ -304,6 +307,7 @@ pi-packages/
       project-detect.ts       Loads correct skill from project file signals
     prompts/                  Base prompt templates
       fix.md  review.md  generate.md  explain.md  decompose.md
+      red.md  green.md  refactor.md
     models/
       models-us-eu.json           List A: US/EU origin models (Ollama)
       models-best.json            List B: best overall (Ollama)
@@ -316,7 +320,7 @@ pi-packages/
       Each package:
       package.json            Pi manifest + npm metadata
       skills/<type>.md        Behavior invariants + grounded-code collection map
-      prompts/                5 prompt templates (domain-specific overrides)
+      prompts/                8 prompt templates (domain-specific overrides)
       extensions/             Symlinks → shared/extensions/
       modelfiles/
         <type>.Modelfile      Ollama model wrapper (temperature 0.15, num_ctx)

@@ -8,7 +8,7 @@ templates, and persistent decisions.
 ## Quick Reference
 
 - **Skills:** `packages/pi-<type>/skills/<type>.md` — < 500 tokens, RAG-first, invariants + collection map
-- **Prompt templates:** `packages/pi-<type>/prompts/` — 5 files (fix / review / generate / explain / decompose); base templates in `shared/prompts/`
+- **Prompt templates:** `packages/pi-<type>/prompts/` — 8 files (fix / review / generate / explain / decompose / red / green / refactor); base templates in `shared/prompts/`
 - **Extensions:** `packages/pi-<type>/extensions/` — symlinks to `shared/extensions/` (rag, router, budget, project-detect)
 - **Modelfiles:** `packages/pi-<type>/modelfiles/<type>.Modelfile` — Ollama-only convenience wrapper; behavior rules are authoritative in the skill file
 - **Types:** `shared/types/pi.d.ts` — Pi ExtensionAPI declarations; read before editing any extension
@@ -51,6 +51,9 @@ Follow `README.md § Add a new project-type package` exactly:
 3. Symlink `shared/extensions/` into `packages/pi-<type>/extensions/`
 4. Add project-type signals to `shared/extensions/project-detect.ts`
 5. Run `npm run lint` — must pass before commit
+
+Prompt templates required: fix, review, generate, explain, decompose, red, green, refactor (8 total).
+Copy from `shared/prompts/` and override with the domain-specific test runner and any safety constraints.
 
 The Modelfile is Ollama-only. MLX-LM users get behavior rules from the skill file — no additional file needed.
 

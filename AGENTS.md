@@ -47,7 +47,7 @@
   - `shared/types/pi.d.ts` — Pi ExtensionAPI TypeScript declarations
 - **Key directories:**
   - `packages/pi-<type>/skills/<type>.md` — skill invariants and grounded-code collection map
-  - `packages/pi-<type>/prompts/` — five prompt templates: fix, review, generate, explain, decompose
+  - `packages/pi-<type>/prompts/` — eight prompt templates: fix, review, generate, explain, decompose, red, green, refactor
   - `packages/pi-<type>/extensions/` — symlinks to `shared/extensions/`
   - `packages/pi-<type>/modelfiles/<type>.Modelfile` — Ollama convenience wrapper (temperature 0.15, num_ctx); behavior rules are authoritative in `skills/<type>.md`
   - `scripts/prepublish.js` — resolves symlinks before npm publish
@@ -120,6 +120,7 @@ These are the minimal rules every project-type harness inherits:
 | 2026-06-04 | MLX-LM model entries use the same `id` values as Ollama entries | Router extension and Pi model references stay stable; only `provider`, `baseUrl`, and `model` differ between backends |
 | 2026-06-04 | MLX-LM files are peer supplements, not replacements for existing model files | Ollama users touch nothing; Apple Silicon users swap in (or merge in) the MLX files |
 | 2026-06-04 | Skill files are the authoritative source for behavior rules; Modelfiles are Ollama-only convenience wrappers | MLX-LM has no Modelfile equivalent — system prompts must live in the skill file to be backend-agnostic |
+| 2026-06-07 | TDD phase templates (red/green/refactor) added to `shared/prompts/` and all six packages | Phase-locked templates are invoked on demand — zero always-on token cost. They externalize RGR discipline into the prompt structure so the model doesn't need to maintain it across turns. Global AGENTS.md already states RGR; templates make each phase an explicit invocation target. |
 
 ---
 
@@ -189,9 +190,11 @@ The `## Output format` section is the authoritative substitute for the Modelfile
 
 ### Prompt Templates
 
-Five templates in `prompts/`: `fix.md`, `review.md`, `generate.md`, `explain.md`, `decompose.md`.
+Eight templates in `prompts/`: `fix.md`, `review.md`, `generate.md`, `explain.md`, `decompose.md`, `red.md`, `green.md`, `refactor.md`.
 Packages may override the base templates in `shared/prompts/` with domain-specific context.
 Keep templates under 300 tokens — local models waste context on format overhead.
+
+The three TDD phase templates (`red`, `green`, `refactor`) are explicit entry points for the Red→Green→Refactor cycle. They lock each phase so the model cannot conflate them. Use them as: `/red <behavior>` → review → `/green` → review → `/refactor`. Package overrides add the domain-specific test runner command (`dotnet test`, `pytest -v`, `php artisan test`, `cargo test`) and any safety constraints (robotics, industrial).
 
 ### Modelfile
 
