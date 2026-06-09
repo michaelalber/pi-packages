@@ -20,23 +20,14 @@ const THRESHOLDS = {
   medium: 500   // above → complex tier
 } as const;
 
-const DEFAULTS: Required<RouterConfig> = {
-  medium: "pc/phi4:14b",
-  complex: "mac-mini/codestral:22b"
-};
-
 const CONFIG_PATH = path.join(os.homedir(), ".pi", "agent", "router-config.json");
 
-function loadConfig(): Required<RouterConfig> {
+function loadConfig(): RouterConfig {
   try {
     const raw = fs.readFileSync(CONFIG_PATH, "utf-8");
-    const parsed = JSON.parse(raw) as RouterConfig;
-    return {
-      medium: parsed.medium ?? DEFAULTS.medium,
-      complex: parsed.complex ?? DEFAULTS.complex
-    };
+    return JSON.parse(raw) as RouterConfig;
   } catch {
-    return { ...DEFAULTS };
+    return {};
   }
 }
 
@@ -48,6 +39,7 @@ export default function(pi: ExtensionAPI) {
 
     const models = loadConfig();
     const target = len < THRESHOLDS.medium ? models.medium : models.complex;
+    if (!target) return;
     await pi.setModel(target);
     ctx.ui.notify(`Routed to ${target} (message length: ${len})`);
   });
