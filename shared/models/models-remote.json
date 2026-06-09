@@ -1,6 +1,6 @@
 {
   "_description": "Tailscale / VPN overrides — Mac Mini Ollama provider. Merge the 'ollama-mac-mini' block into your base models.json providers object.",
-  "_notes": "In most Tailscale setups http://mac-mini:11434 works everywhere. Use this file only if MagicDNS short names don't resolve outside the tailnet. Replace tail12345 with your actual tailnet name from tailscale status.",
+  "_notes": "In most Tailscale setups http://mac-mini:11434 works everywhere. Use this file only if MagicDNS short names don't resolve outside the tailnet. Replace tail12345 with your actual tailnet name from tailscale status. snowflake-arctic-embed2 (1.2 GB) is also installed for RAG embeddings but is not listed here — Pi does not route completions to it.",
   "providers": {
     "ollama-mac-mini": {
       "baseUrl": "http://mac-mini.tail12345.ts.net:11434/v1",
@@ -13,35 +13,27 @@
       "models": [
         {
           "id": "mac-mini/qwen3-coder:30b",
-          "name": "Qwen3 Coder 30B (Mac Mini)",
-          "_notes": "Primary Mac Mini coding agent — MoE 256K context",
+          "name": "Qwen3 Coder 30B MoE (Mac Mini)",
+          "_notes": "Primary coder — Python, PHP, Rust, general reasoning; MoE 256K context",
           "input": ["text"],
           "contextWindow": 131072,
-          "maxTokens": 4096,
+          "maxTokens": 8192,
           "reasoning": true
         },
         {
-          "id": "mac-mini/devstral:24b",
-          "name": "Devstral 24B (Mac Mini)",
-          "_notes": "Agentic fallback on Mac Mini — 256K context",
+          "id": "mac-mini/phi4:14b",
+          "name": "Phi-4 14B (Mac Mini)",
+          "_notes": ".NET 10 / C# specialist — US-origin Microsoft model",
           "input": ["text"],
           "contextWindow": 131072,
           "maxTokens": 4096
         },
         {
-          "id": "mac-mini/llama3.3:70b",
-          "name": "Llama 3.3 70B (Mac Mini)",
-          "_notes": "Deep reasoning and architecture review",
+          "id": "mac-mini/qwen2.5-coder:7b",
+          "name": "Qwen2.5 Coder 7B (Mac Mini)",
+          "_notes": "Fast autocomplete and FIM — sub-150-token tasks and inline completions",
           "input": ["text"],
-          "contextWindow": 131072,
-          "maxTokens": 4096
-        },
-        {
-          "id": "mac-mini/command-r:35b",
-          "name": "Command R 35B (Mac Mini)",
-          "_notes": "RAG-heavy tasks, 128K context",
-          "input": ["text"],
-          "contextWindow": 131072,
+          "contextWindow": 32768,
           "maxTokens": 4096
         }
       ]

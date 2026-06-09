@@ -12,8 +12,7 @@ templates, and persistent decisions.
 - **Extensions:** `packages/pi-<type>/extensions/` — symlinks to `shared/extensions/` (rag, router, budget, project-detect)
 - **Modelfiles:** `packages/pi-<type>/modelfiles/<type>.Modelfile` — Ollama-only convenience wrapper; behavior rules are authoritative in the skill file
 - **Types:** `shared/types/pi.d.ts` — Pi ExtensionAPI declarations; read before editing any extension
-- **Models (Ollama):** `shared/models/models-us-eu.json` (List A), `models-best.json` (List B), `models-remote.json` (Tailscale)
-- **Models (MLX-LM):** `shared/models/models-mac-mini-mlx.json` (Apple Silicon Mac Mini), `models-remote-mlx.json` (Tailscale)
+- **Models (Ollama):** `shared/models/models-us-eu.json` (List A), `models-best.json` (List B), `models-mac-mini.json` (Mac Mini, LAN), `models-remote.json` (Tailscale)
 
 ---
 
@@ -40,7 +39,7 @@ grep -r "pi\." packages/pi-dotnet/extensions/ | head -20
 1. Copy the gold standard: `packages/pi-dotnet/skills/dotnet.md`
 2. Keep total token count < 500 — precision beats comprehensiveness for local models
 3. Structure: Before writing code (RAG calls) → Invariants → Task approach → Quality gates → **Output format** → Collection map
-4. The `## Output format` section is required — it is the authoritative source for output conventions for both Ollama and MLX-LM users
+4. The `## Output format` section is required — it is the authoritative source for output conventions for all Ollama users (Laptop, PC, Mac Mini)
 5. Map all grounded-code collections the project type needs (see `AGENTS.md § grounded-code Collection Map`)
 
 ## When Adding a Package
@@ -55,7 +54,7 @@ Follow `README.md § Add a new project-type package` exactly:
 Prompt templates required: fix, review, generate, explain, decompose, red, green, refactor (8 total).
 Copy from `shared/prompts/` and override with the domain-specific test runner and any safety constraints.
 
-The Modelfile is Ollama-only. MLX-LM users get behavior rules from the skill file — no additional file needed.
+The Modelfile is an Ollama convenience wrapper. Behavior rules are authoritative in the skill file and apply across all machines (Laptop, PC, Mac Mini).
 
 ## When Modifying a Shared Extension
 

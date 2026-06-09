@@ -1,9 +1,8 @@
 {
   "_note": "Copy to ~/.pi/agent/router-config.json and set 'medium' and 'complex' to model IDs that exist in your models.json. _prefixed keys are ignored by the router.",
-  "_list_a_us_eu": "medium: phi4:14b  |  complex: mac-mini/codestral:22b",
-  "_list_b_best":  "medium: qwen2.5-coder:14b  |  complex: qwen3-coder:30b",
-  "_mac_mini_note": "When Mac Mini is available, set complex to mac-mini/<model> to route heavy tasks off-device.",
-  "_mlx_lm_note":  "MLX-LM uses the same IDs as Ollama — only the backend differs in models.json",
+  "_list_a_us_eu": "medium: phi4:14b  |  complex: mac-mini/phi4:14b (dotnet) or mac-mini/qwen3-coder:30b",
+  "_list_b_best":  "medium: qwen2.5-coder:14b  |  complex: mac-mini/qwen3-coder:30b",
+  "_mac_mini_note": "When Mac Mini is available, set complex to mac-mini/<model> to route heavy tasks off-device. For .NET use mac-mini/phi4:14b; for Python/PHP/Rust use mac-mini/qwen3-coder:30b.",
   "medium":  "qwen2.5-coder:14b",
   "complex": "qwen3-coder:30b"
 }

@@ -6,7 +6,7 @@ Each package teaches Pi how to behave as a domain expert for a specific stack. W
 
 Local models don't self-correct the way frontier models do. Getting reliable output from a 14B parameter model requires skill files precise enough to fit in 500 tokens, RAG grounding before generation rather than as a fallback, and routing logic that matches model capability to task complexity. These packages encode that discipline across six project types so you don't have to rediscover it per stack.
 
-Supports [Ollama](https://ollama.com) on all platforms and [MLX-LM](https://github.com/ml-explore/mlx-lm) on Apple Silicon.
+Supports [Ollama](https://ollama.com) on all platforms including Apple Silicon Mac Mini.
 
 ---
 
@@ -49,7 +49,7 @@ Each package is composed of four parts that work together:
 - `budget.ts` — monitors context window usage and triggers Pi auto-compact at 80% capacity
 - `project-detect.ts` — reads project signals (`.csproj`, `Cargo.toml`, `composer.json`, etc.) and loads the right skill without manual configuration
 
-**Modelfile** (`modelfiles/<type>.Modelfile`) — Ollama convenience wrapper that sets temperature, context window, and a system prompt stub. The Modelfile is Ollama-only; behavior rules are authoritative in the skill file, which MLX-LM users get directly.
+**Modelfile** (`modelfiles/<type>.Modelfile`) — Ollama convenience wrapper that sets temperature, context window, and a system prompt stub. Behavior rules are authoritative in the skill file so they work consistently across all Ollama endpoints (Laptop, PC, Mac Mini).
 
 The shared extensions live in `shared/extensions/` and are symlinked into each package. `scripts/prepublish.js` resolves the symlinks before publishing to npm and restores them after, keeping the source tree clean without breaking consumers.
 
@@ -62,7 +62,6 @@ The shared extensions live in `shared/extensions/` and are symlinked into each p
 | [Node.js](https://nodejs.org) | 20 LTS | `nvm install 20` |
 | [Pi agent](https://pi.dev) | 1.x | `curl -fsSL https://pi.dev/install.sh \| sh` |
 | [Ollama](https://ollama.com) | latest | `curl -fsSL https://ollama.com/install.sh \| sh` |
-| [MLX-LM](https://github.com/ml-explore/mlx-lm) | latest | `pip install mlx-lm` — Apple Silicon only |
 | Git | any | system package manager |
 
 Verify installs: `pi --version` / `ollama --version`
@@ -98,7 +97,7 @@ ollama pull phi3.5:3.8b           # ultrafast fallback
 ollama pull snowflake-arctic-embed2  # embeddings — required for grounded-code-mcp RAG
 ```
 
-Mac Mini (MLX-LM): models download automatically on first `mlx_lm.server` run — no `ollama pull` needed.
+Mac Mini: pull models on the Mac Mini itself — `ollama pull qwen3-coder:30b`, `ollama pull phi4:14b`, `ollama pull qwen2.5-coder:7b`, `ollama pull snowflake-arctic-embed2`.
 
 ### 3. Hardware & model selection
 
@@ -108,9 +107,8 @@ Choose the model list that matches your environment:
 |---|---|
 | `shared/models/models-us-eu.json` | US/EU origin models only (compliance requirement) |
 | `shared/models/models-best.json` | Best quality regardless of origin |
+| `shared/models/models-mac-mini.json` | Mac Mini on Apple Silicon — Ollama, LAN access |
 | `shared/models/models-remote.json` | Tailscale VPN — Ollama Mac Mini |
-| `shared/models/models-mac-mini-mlx.json` | Mac Mini on Apple Silicon — MLX-LM backend |
-| `shared/models/models-remote-mlx.json` | Tailscale VPN — MLX-LM Mac Mini |
 
 | Machine | List | Backend | Recommended primary model |
 |---|---|---|---|
@@ -118,7 +116,7 @@ Choose the model list that matches your environment:
 | Laptop (RTX 3060) | List B | Ollama | `qwen2.5-coder:7b` |
 | PC (RTX 3080) | List A | Ollama | `phi4:14b` |
 | PC (RTX 3080) | List B | Ollama | `qwen3-coder:30b` / `devstral:24b` |
-| Mac Mini (Apple Silicon) | — | MLX-LM | `Qwen2.5-Coder-32B-Instruct-4bit` (~18 GB) |
+| Mac Mini (Apple Silicon, 48 GB) | — | Ollama | `qwen3-coder:30b` (general) / `phi4:14b` (.NET) |
 
 ### 4a. Mac Mini: expose Ollama for network inference
 
@@ -132,35 +130,25 @@ Verify from PC: `curl http://mac-mini:11434/api/tags`
 
 If you use Tailscale, `mac-mini` resolves via MagicDNS on both LAN and VPN automatically.
 
-### 4b. Mac Mini: MLX-LM (alternative to Ollama on Apple Silicon)
+### 4b. Mac Mini: pull inference models
 
-MLX-LM uses Metal natively and gives better throughput than Ollama on M-series chips.
+Pull the models that will serve remote requests on the Mac Mini.
 
 ```bash
-pip install mlx-lm
-
-mlx_lm.server \
-  --model mlx-community/Qwen2.5-Coder-32B-Instruct-4bit \
-  --port 8080 \
-  --host 0.0.0.0
+# On the Mac Mini
+ollama pull qwen3-coder:30b          # primary coder — Python, PHP, Rust, reasoning; MoE 256K context
+ollama pull phi4:14b                 # .NET 10 / C# specialist — US-origin Microsoft model
+ollama pull qwen2.5-coder:7b         # fast autocomplete and FIM
+ollama pull snowflake-arctic-embed2  # grounded-code-mcp RAG embeddings
 ```
 
-`mlx_lm.server` serves one model at a time; restart with a different `--model` to switch.
-
-| Use case | Model | Approx size |
+| Use case | Model | Approx unified memory |
 |---|---|---|
-| Primary coding | `mlx-community/Qwen2.5-Coder-32B-Instruct-4bit` | ~18 GB |
-| Deep reasoning | `mlx-community/Llama-3.3-70B-Instruct-4bit` | ~38 GB |
-| EU coding / PHP | `mlx-community/Codestral-22B-v0.1-4bit` | ~12 GB |
-| RAG tasks | `mlx-community/c4ai-command-r-v01-4bit` | ~19 GB |
+| Primary / general coding | `qwen3-coder:30b` | ~18 GB |
+| .NET 10 / C# | `phi4:14b` | ~9 GB |
+| Fast autocomplete / FIM | `qwen2.5-coder:7b` | ~5 GB |
 
-Keep Ollama running on the Mac Mini for embeddings only:
-
-```bash
-ollama pull snowflake-arctic-embed2   # grounded-code-mcp RAG embeddings
-```
-
-Verify MLX-LM from PC: `curl http://mac-mini:8080/v1/models`
+Verify from PC: `curl http://mac-mini:11434/api/tags`
 
 ### 5. Register Modelfiles
 
@@ -185,12 +173,14 @@ cp shared/models/models-best.json ~/.pi/agent/models.json
 # or models-us-eu.json for compliance-restricted environments
 ```
 
-**Mac Mini only (MLX-LM):**
+**Mac Mini only (Ollama):**
 ```bash
-cp shared/models/models-mac-mini-mlx.json ~/.pi/agent/models.json
+cp shared/models/models-mac-mini.json ~/.pi/agent/models.json
 ```
 
-**Mixed fleet:** Start from `models-best.json`, then merge the appropriate remote provider block into the `providers` object — `ollama-mac-mini` from `models-remote.json` or `mlx-lm-mac-mini` from `models-mac-mini-mlx.json`. Update `router-config.json` to reference the `mac-mini/*` model IDs for the `complex` tier.
+**Mixed fleet (PC + Mac Mini, LAN):** Start from `models-best.json`, then merge the `ollama-mac-mini` provider block from `models-mac-mini.json` into the `providers` object. Update `router-config.json` to set `complex` to a `mac-mini/<model>` ID.
+
+**Mixed fleet (Tailscale / VPN):** Use `models-remote.json` instead of `models-mac-mini.json` — same models, Tailscale hostname.
 
 ### 7. Install grounded-code-mcp
 
@@ -312,8 +302,8 @@ pi-packages/
       models-us-eu.json           List A: US/EU origin models (Ollama)
       models-best.json            List B: best overall (Ollama)
       models-remote.json          Tailscale VPN overrides (Ollama)
-      models-mac-mini-mlx.json    Mac Mini MLX-LM backend
-      models-remote-mlx.json      Tailscale VPN overrides (MLX-LM)
+      models-mac-mini.json        Mac Mini Ollama (LAN)
+      models-remote.json          Tailscale VPN overrides (Ollama)
 
   packages/
     pi-dotnet/ pi-php/ pi-python/ pi-robotics/ pi-industrial/ pi-rust/

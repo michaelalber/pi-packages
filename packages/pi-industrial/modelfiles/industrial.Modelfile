@@ -2,15 +2,13 @@
 # Usage: ollama create industrial-coder -f packages/pi-industrial/modelfiles/industrial.Modelfile
 # NOTE: SYSTEM prompt content is authoritative in packages/pi-industrial/skills/industrial.md
 #       This file is an Ollama convenience wrapper only.
-#       MLX-LM users: see shared/models/models-mac-mini-mlx.json
+#       Mac Mini users: see shared/models/models-mac-mini.json
 #
-# PC default: qwen3-coder:30b — swap FROM line for other targets:
-#   FROM devstral:24b             (PC — alternative, 14 GB)
-#   FROM qwen2.5-coder:14b        (PC — lighter, fits 10 GB VRAM Q4)
-#   FROM llama3.3:70b             (Mac Mini — deep reasoning)
-#   FROM qwen2.5-coder:32b        (Mac Mini — List B best overall)
+# PC primary: qwen2.5-coder:14b (9 GB, full RTX 3080 VRAM) — swap FROM line for other targets:
+#   FROM qwen2.5-coder:7b         (PC fast fallback / Laptop, 4.7 GB)
+# Heavy tasks (>500 tokens) route to Mac Mini automatically via router.ts
 
-FROM qwen3-coder:30b
+FROM qwen2.5-coder:14b
 
 PARAMETER temperature 0.15
 PARAMETER top_p 0.9

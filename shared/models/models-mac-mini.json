@@ -1,0 +1,49 @@
+{
+  "_description": "Mac Mini (Apple Silicon) — Ollama backend (LAN). Merge the 'ollama-mac-mini' block into your base models.json providers object, or use as a standalone models.json on the Mac Mini itself.",
+  "_notes": [
+    "Mac Mini runs Ollama on port 11434, same API as PC/Laptop — no backend switch needed.",
+    "Mixed fleet (PC/Laptop + Mac Mini on LAN): merge ollama-mac-mini into your base models.json providers.",
+    "Single Mac Mini only: use this file directly as ~/.pi/agent/models.json.",
+    "Tailscale / VPN: use models-remote.json instead — same models, Tailscale hostname.",
+    "snowflake-arctic-embed2 (1.2 GB) is installed for grounded-code-mcp RAG embeddings — it is not listed as a chat model because Pi does not route completions to it.",
+    "Mac Mini Ollama must be exposed: export OLLAMA_HOST=0.0.0.0 && ollama serve"
+  ],
+  "providers": {
+    "ollama-mac-mini": {
+      "baseUrl": "http://mac-mini.local:11434/v1",
+      "api": "openai-completions",
+      "apiKey": "ollama",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false
+      },
+      "models": [
+        {
+          "id": "mac-mini/qwen3-coder:30b",
+          "name": "Qwen3 Coder 30B MoE (Mac Mini)",
+          "_notes": "Primary coder — Python, PHP, Rust, general reasoning; MoE (3.3B active / 30B total), 256K context",
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 8192,
+          "reasoning": true
+        },
+        {
+          "id": "mac-mini/phi4:14b",
+          "name": "Phi-4 14B (Mac Mini)",
+          "_notes": ".NET 10 / C# specialist — US-origin Microsoft model; strong on typed OO code",
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 4096
+        },
+        {
+          "id": "mac-mini/qwen2.5-coder:7b",
+          "name": "Qwen2.5 Coder 7B (Mac Mini)",
+          "_notes": "Fast autocomplete and FIM — sub-150-token tasks and inline completions",
+          "input": ["text"],
+          "contextWindow": 32768,
+          "maxTokens": 4096
+        }
+      ]
+    }
+  }
+}
