@@ -4,12 +4,13 @@
 #       This file is an Ollama convenience wrapper only.
 #       Mac Mini users: see shared/models/models-mac-mini.json
 #
-# PC primary: qwen2.5-coder:14b (9 GB, full RTX 3080 VRAM) — swap FROM line for other targets:
-#   FROM qwen2.5-coder:7b   (PC fast fallback / Laptop, 4.7 GB)
-#   FROM phi4:14b           (.NET 10 / C# specialist, 9 GB — also on Mac Mini via router)
+# PC/Mac Mini primary: qwen3-coder:30b (MoE, 3.3B active / 30B total; supports tools) — swap FROM line for other targets:
+#   FROM devstral:24b     (heavy agentic tasks; partial VRAM offload on RTX 3080; supports tools)
+#   FROM phi4:14b         (.NET 10 / C# specialist, 9 GB — WARNING: no tool support, RAG extensions disabled)
+#   FROM phi3.5:3.8b      (US-origin List A fast fallback; supports tools but limited quality at 3.8B)
 # Heavy tasks (>500 tokens) route to Mac Mini automatically via router.ts
 
-FROM qwen2.5-coder:14b
+FROM qwen3-coder:30b
 
 PARAMETER temperature 0.15
 PARAMETER top_p 0.9

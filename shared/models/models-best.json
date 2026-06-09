@@ -1,6 +1,7 @@
 {
   "_description": "List B — Best overall regardless of origin (Ollama, local machine). Copy to ~/.pi/agent/models.json.",
   "_mixed_fleet": "For PC + Mac Mini, also add the 'ollama-mac-mini' provider block from models-remote.json into the providers object.",
+  "_warning": "qwen2.5-coder:7b and qwen2.5-coder:14b removed — known incompatibility with Pi. devstral:24b (PC primary) and qwen3-coder:30b (Mac Mini primary) both support tools.",
   "providers": {
     "ollama": {
       "baseUrl": "http://localhost:11434/v1",
@@ -12,25 +13,9 @@
       },
       "models": [
         {
-          "id": "qwen2.5-coder:7b",
-          "name": "Qwen 2.5 Coder 7B",
-          "_notes": "Fast completions — Laptop primary or PC fallback",
-          "input": ["text"],
-          "contextWindow": 32768,
-          "maxTokens": 2048
-        },
-        {
-          "id": "qwen2.5-coder:14b",
-          "name": "Qwen 2.5 Coder 14B",
-          "_notes": "PC primary coding model — fits fully in RTX 3080 10 GB VRAM",
-          "input": ["text"],
-          "contextWindow": 131072,
-          "maxTokens": 4096
-        },
-        {
           "id": "devstral:24b",
           "name": "Devstral 24B",
-          "_notes": "Agentic coder — multi-file edits, 256K context; partial VRAM offload on RTX 3080",
+          "_notes": "PC primary — agentic coder; multi-file edits, 256K context; partial VRAM offload on RTX 3080; supports tools",
           "input": ["text"],
           "contextWindow": 131072,
           "maxTokens": 4096
@@ -38,7 +23,7 @@
         {
           "id": "qwen3-coder:30b",
           "name": "Qwen3 Coder 30B (MoE)",
-          "_notes": "MoE (3.3B active / 30B total) — long-context RAG and agentic loops; 256K context",
+          "_notes": "Mac Mini primary — MoE (3.3B active / 30B total); long-context RAG and agentic loops; 256K context; supports tools",
           "input": ["text"],
           "contextWindow": 131072,
           "maxTokens": 4096,

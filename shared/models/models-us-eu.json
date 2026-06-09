@@ -1,6 +1,7 @@
 {
   "_description": "List A — US/EU origin models only (for restricted clients). Copy to ~/.pi/agent/models.json.",
   "_mixed_fleet": "For PC + Mac Mini, also add the 'ollama-mac-mini' provider block from models-remote.json into the providers object.",
+  "_warning": "Only phi3.5:3.8b supports tools in this list. granite-code:8b and phi4:14b do not support tool calling — Pi RAG extensions will be disabled when using those models.",
   "providers": {
     "ollama": {
       "baseUrl": "http://localhost:11434/v1",
@@ -12,25 +13,25 @@
       },
       "models": [
         {
-          "id": "granite-code:8b",
-          "name": "Granite Code 8B",
-          "_notes": "Fast completions on Laptop / PC fallback — US origin",
-          "input": ["text"],
-          "contextWindow": 32768,
-          "maxTokens": 2048
-        },
-        {
           "id": "phi3.5:3.8b",
           "name": "Phi-3.5 3.8B",
-          "_notes": "Ultrafast fallback, 128K context — US origin",
+          "_notes": "Only List A model with tool support — US origin; 128K context; limited quality at 3.8B",
           "input": ["text"],
           "contextWindow": 131072,
           "maxTokens": 2048
         },
         {
+          "id": "granite-code:8b",
+          "name": "Granite Code 8B",
+          "_notes": "Fast completions on Laptop / PC fallback — US origin; WARNING: no tool support, RAG extensions disabled",
+          "input": ["text"],
+          "contextWindow": 32768,
+          "maxTokens": 2048
+        },
+        {
           "id": "phi4:14b",
           "name": "Phi-4 14B",
-          "_notes": "Primary PC model, tight at Q4 on RTX 3080 10 GB VRAM — US origin",
+          "_notes": "Primary PC model, tight at Q4 on RTX 3080 10 GB VRAM — US origin; WARNING: no tool support, RAG extensions disabled",
           "input": ["text"],
           "contextWindow": 131072,
           "maxTokens": 4096
